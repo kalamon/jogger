@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#005484</color>
+    <color name="colorAccent">#ff4081</color>
+    <color name="lightGrey">#ebebeb</color>
+    <color name="spartez">#037BC0</color>
+    <color name="spartezDark">#005484</color>
+    <color name="white">#FFFFFF</color>
+</resources>

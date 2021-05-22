@@ -1,0 +1,21 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="force_same_jira_url"
+        android:summary="@string/pref_description_force_same_jira_url"
+        android:title="@string/pref_title_force_same_jira_url" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="automatic_field_creation"
+        android:summary="@string/pref_description_automatic_field_creation"
+        android:title="@string/pref_title_automatic_field_creation" />
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="automatic_scan_continuation"
+        android:summary="@string/pref_description_automatic_scan_continuation"
+        android:title="@string/pref_title_automatic_scan_continuation" />
+
+</PreferenceScreen>

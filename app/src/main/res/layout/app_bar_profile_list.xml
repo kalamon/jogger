@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.spartez.assettracker.checkin.activity.ProfileListActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_profile_list" />
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+    <!--android:id="@+id/fab"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="bottom|end"-->
+    <!--android:layout_margin="@dimen/fab_margin"-->
+    <!--app:backgroundTint="@color/spartez"-->
+    <!--app:srcCompat="@drawable/ic_add_white_24px" />-->
+
+    <!--<io.github.yavski.fabspeeddial.FabSpeedDial-->
+    <!--android:id="@+id/fab"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="bottom|end"-->
+    <!--app:fabGravity="bottom_end"-->
+    <!--app:fabMenu="@menu/menu_new_profile"-->
+    <!--app:miniFabBackgroundTint="@android:color/white"-->
+    <!--app:miniFabDrawableTint="?attr/colorPrimaryDark"-->
+    <!--app:miniFabTitleTextColor="?attr/colorPrimaryDark" />-->
+
+    <LinearLayout
+        android:id="@+id/add_profile_menu_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:orientation="vertical" />
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/action_add_profile_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:fab_addButtonColorNormal="@color/spartez"
+        app:fab_addButtonColorPressed="@color/spartez"
+        app:fab_addButtonPlusIconColor="@color/white"
+        app:fab_icon="@drawable/ic_add_white_24px"
+        app:fab_labelStyle="@style/menu_labels_style">
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_add_stored_op_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="@color/white"
+            app:fab_colorPressed="@color/white"
+            app:fab_icon="@drawable/ic_play_circle_outline_black_24dp"
+            app:fab_size="mini"
+            app:fab_title="@string/menu_item_stored_op" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_add_date_field_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="@color/white"
+            app:fab_colorPressed="@color/white"
+            app:fab_icon="@drawable/ic_date_range_black_24dp"
+            app:fab_size="mini"
+            app:fab_title="@string/menu_item_date_field" />
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+</android.support.design.widget.CoordinatorLayout>

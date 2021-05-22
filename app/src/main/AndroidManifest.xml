@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.spartez.assettracker.checkin">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/asset_tracker"
+        android:label="@string/app_main_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="fullSensor"
+            tools:replace="screenOrientation" />
+        <activity
+            android:name=".activity.ScanActivity"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name=".activity.ProfileActivity"
+            android:configChanges="orientation|screenSize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.ProfileListActivity" />
+        </activity>
+        <activity
+            android:name=".activity.ProfileListActivity"
+            android:label="@string/app_main_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:label="@string/title_activity_settings">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.spartez.assettracker.checkin.activity.ProfileListActivity" />
+        </activity>
+        <activity
+            android:name=".activity.AboutActivity"
+            android:label="@string/title_activity_about">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.spartez.assettracker.checkin.activity.ProfileListActivity" />
+        </activity>
+
+
+        <activity
+            android:name=".activity.CustomScannerActivity"
+            android:screenOrientation="fullSensor"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme"
+            android:windowSoftInputMode="stateAlwaysHidden">
+        </activity>
+
+        <!--<activity android:name=".activity.example.ContinuousCaptureActivity">-->
+        <!--</activity>-->
+
+        <!--<activity android:name=".activity.example.ToolbarCaptureActivity"-->
+            <!--android:clearTaskOnLaunch="true"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:stateNotNeeded="true"-->
+            <!--android:theme="@style/AppCompatCaptureTheme"-->
+            <!--android:windowSoftInputMode="stateAlwaysHidden">-->
+        <!--</activity>-->
+
+    </application>
+
+</manifest>

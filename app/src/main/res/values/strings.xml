@@ -1,0 +1,138 @@
+<resources>
+    <string name="app_name">Asset Label Scanner</string>
+    <string name="app_full_name">Asset Tracker\nLabel Scanner</string>
+    <string name="app_main_name">Label Scanner</string>
+
+    <string name="action_scan">Scan</string>
+    <string name="action_delete">Delete</string>
+    <string name="title_activity_profile_list">Scan profiles</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="confirm_delete">Do you really want to delete this profile?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="profile">Scan profile</string>
+    <string name="date_field_profile">Date field</string>
+    <string name="stored_operation_profile">Operation sequence</string>
+    <string name="login">Login</string>
+    <string name="url">URL</string>
+    <string name="password">Password</string>
+    <string name="jira_url">JIRA URL</string>
+    <string name="login_name">Login name</string>
+    <string name="test">Test</string>
+    <string name="field">Field</string>
+    <string name="storedop">Sequence</string>
+    <string name="jira_server_info">JIRA server info</string>
+    <string name="at_folders">Asset Tracker folders</string>
+    <string name="at_fields">Asset Tracker fields</string>
+    <string name="at_storedops">Operation sequences</string>
+    <string name="field_types_result">%d field types</string>
+    <string name="storedops_result">%d sequences</string>
+    <string name="categories_result">%d toplevel folders</string>
+    <string name="jira_server_info_result">v%1$s %2$s</string>
+    <string name="error_retrieving_fields">Error retrieving fields: %s</string>
+    <string name="error_retrieving_storedops">Error retrieving operation sequences: %s</string>
+    <string name="result_entry">%1$s: %2$s</string>
+    <string name="action_save_profile">Save</string>
+    <string name="field_is_null">Field must be selected</string>
+    <string name="stored_op_is_null">Operation sequence must be selected</string>
+    <string name="password_is_null">Password must be set</string>
+    <string name="login_is_null">Login must be set</string>
+    <string name="url_is_null">JIRA URL must be set</string>
+    <string name="no_date_fields">No fields of type \"Date\" were found in your Asset Tracker\'s data scheme. Add them in the Asset Tracker settings in JIRA.</string>
+    <string name="no_storedops">No operation sequences are defined in your Asset Tracker. Add at least one and try again.</string>
+    <string name="close">Close</string>
+    <string name="cancelled">Cancelled scan</string>
+    <string name="scanned_qr_code_html"><![CDATA[Updated asset <a href=\"%1$s\">#%2$s</a>]]></string>
+    <string name="scanned_qr_code_text">Updated asset #%1$s</string>
+    <string name="action_continue_scan">Scan</string>
+    <string name="scanned_invalid_qr_code_text">Scanned non-asset QR code</string>
+    <string name="scanned_invalid_qr_code_html"><![CDATA[Scanned <a href=\"%1$s\">non-asset QR code</a>]]></string>
+    <string name="scanned_invalid_qr_code_html_pre"><![CDATA[Scanned non-asset QR code: <pre>%1$s</pre>]]></string>
+    <string name="empty_scan_log"><![CDATA[<p style=\"padding:2em;text-align:center\">Press button below to scan QR code]]></string>
+    <string name="title_activity_settings">Settings</string>
+
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_force_same_jira_url">Force JIRA URL</string>
+    <string name="pref_description_force_same_jira_url">
+        Check if JIRA URL is the same as the one encoded in QR code. Clear this option your JIRA URL has changed since printing asset labels.
+    </string>
+
+    <string name="pref_title_automatic_scan_continuation">Scan without confirmation</string>
+    <string name="pref_description_automatic_scan_continuation">
+        Initiate new scan after scanning a QR code and updating an asset
+    </string>
+
+    <string name="pref_header_network">Network</string>
+
+    <string name="about">About</string>
+    <string name="information">Information</string>
+    <string name="feedback">Send Feedback</string>
+    <string name="pref_title_read_timeout">Read timeout in seconds</string>
+    <string name="pref_title_connect_timeout">Connect timeout in seconds</string>
+    <string name="pref_description_connect_timeout">Connection timeout of a network call (in seconds)</string>
+    <string name="pref_description_read_timeout">Read timeout of a network call (in seconds)</string>
+    <string name="drawer_title">Asset Tracker Label Scanner</string>
+    <string name="drawer_copyright">&#169; 2017 <![CDATA[<a href="http://spartez.com">Spartez</a>]]></string>
+    <string name="cannot_send_email">Unable to send email</string>
+    <string name="email_client_chooser">Choose an email application</string>
+    <string name="pref_title_automatic_field_creation">Automatically create date fields</string>
+    <string name="pref_description_automatic_field_creation">
+        When updating asset, automatically add date field to asset type definition if it is missing.
+        Confirmation dialog will be displayed before field is added. Adding a field to asset type requires access to Asset Tracker administration.
+    </string>
+    <string name="title_activity_about">About Asset Label Scanner</string>
+    <string name="about_license"><![CDATA[
+            <p>
+                A helper application for <a style=\"color: #0A7BC0\" href=\"https://spartez.com/products/asset-tracker-for-jira\">Asset Tracker for JIRA</a>
+                from Spartez.
+                It is used to scan QR code labels printed from Asset Tracker and placed on assets.
+            </p>
+            <p>
+                Scanning the label causes the selected operation sequence to be executed on an asset record,
+                or the selected date field of the asset record to be set to the current date.
+                It can be used to update assets automatically by scanning their labels and
+                to perform periodic asset checks to find which assets are present and accounted for.
+            </p>
+            <p style=\"font-size:small; text-align:center;\">
+                Licensed under <a style=\"color: #0A7BC0\" href=\"http://www.apache.org/licenses/LICENSE-2.0\">Apache License</a><br/>
+                <a style=\"color: #0A7BC0\" href=\"https://bitbucket.org/spartez/ephor-scanners\">Source code</a>
+            </p>
+        ]]>
+    </string>
+    <string name="scan_qrcode_prompt">Scan QR code on the asset label</string>
+    <string name="turn_on_flashlight">Turn flashlight on</string>
+    <string name="turn_off_flashlight">Turn flashlight off</string>
+    <string name="add_profile_description"><![CDATA[
+        <p>
+            Scan profiles determine what happens when you scan an asset label.
+        </p>
+        <p>
+            It can either be a predefined operation sequence or a date field update.
+        </p>
+        <p>
+            You have not defined any profiles.<br/> Click the \"+\" button below to add one.
+        </p>
+        ]]>
+    </string>
+    <string name="action_copy">Copy</string>
+    <string name="create_date_field">Field \"%1$s\" does not exist in asset #%2$s of type \"%3$s\". Do you want to add it?</string>
+    <string name="field_not_in_asset_type">Field \"%1$s\" does not exist in asset #%2$s of type \"%3$s\"</string>
+    <string name="http_exception">Network error - code %1$d. %2$s</string>
+    <string name="jira_url_does_not_match">JIRA URL in the QR code (%1$s) does not match URL in the profile: %2$s</string>
+    <string name="app_version_text">Version %s</string>
+    <string name="select_field">Select field</string>
+    <string name="select_storedop">Select operation sequence</string>
+    <string name="must_reindex">
+        You have added a field to asset type. Now you have to rebuild index so search functionality could work correctly.
+        You can rebuild index in the Asset Tracker configuration page in JIRA.
+    </string>
+    <string name="must_reindex_title">Rebuild Index</string>
+    <string name="long_press_for_ops">Touch and hold profile for operations</string>
+    <string name="menu_item_stored_op">Add operation sequence profile</string>
+    <string name="menu_item_date_field">Add date field profile</string>
+</resources>
