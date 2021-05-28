@@ -10,7 +10,10 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class Profile implements Serializable {
     private static final String TAG = Profile.class.getName();
@@ -133,6 +136,23 @@ public class Profile implements Serializable {
         }
         result.sort((o1, o2) -> o1.getUrl().compareTo(o2.getUrl()));
         return result;
+    }
+
+    public static Profile getLastOpenProfile(Context context, List<Profile> ofThese) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String guid = preferences.getString(Profile.class.getCanonicalName() + P + ".lastopen", null);
+        if (guid == null) {
+            return null;
+        }
+        Stream<Profile> stream = ofThese.stream().filter(profile -> profile.guid.equals(guid));
+        return stream.findFirst().orElse(null);
+    }
+
+    public static void setLastOpenProfile(Context context, Profile profile) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(Profile.class.getCanonicalName() + P + ".lastopen", profile != null ? profile.getGuid() : null);
+        editor.commit();
     }
 
     public static List<Profile> saveAll(Context context, List<Profile> profiles) {

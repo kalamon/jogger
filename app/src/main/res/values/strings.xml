@@ -88,7 +88,7 @@
     </string>
     <string name="title_activity_about">About Duet CNC Jogger</string>
     <string name="about_license"><![CDATA[
-            <p>
+            <p style=\"text-align:center;\">
                 A jogger for your Duet3D-controlled CNC.
             </p>
             <p style=\"font-size:small; text-align:center;\">
@@ -102,13 +102,7 @@
     <string name="turn_off_flashlight">Turn flashlight off</string>
     <string name="add_profile_description"><![CDATA[
         <p>
-            Scan profiles determine what happens when you scan an asset label.
-        </p>
-        <p>
-            It can either be a predefined operation sequence or a date field update.
-        </p>
-        <p>
-            You have not defined any profiles.<br/> Click the \"+\" button below to add one.
+            Add your CNC machine address by clicking the \"+\" button below
         </p>
         ]]>
     </string>
@@ -125,6 +119,6 @@
         You can rebuild index in the Asset Tracker configuration page in JIRA.
     </string>
     <string name="must_reindex_title">Rebuild Index</string>
-    <string name="long_press_for_ops">Touch and hold profile for operations</string>
+    <string name="long_press_for_ops">Long press to edit machine address</string>
     <string name="menu_item_stored_op">Add Duet3D machine</string>
 </resources>

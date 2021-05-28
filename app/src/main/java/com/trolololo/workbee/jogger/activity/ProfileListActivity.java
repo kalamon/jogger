@@ -18,8 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.trolololo.workbee.jogger.R;
 import com.trolololo.workbee.jogger.adapter.ProfileAdapter;
@@ -44,25 +43,25 @@ public class ProfileListActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final FloatingActionsMenu addProfileMenu = findViewById(R.id.action_add_profile_menu);
+//        final FloatingActionsMenu addProfileMenu = findViewById(R.id.action_add_profile_menu);
 
-        final View menuBackground = findViewById(R.id.add_profile_menu_background);
-        menuBackground.setVisibility(View.GONE);
-        menuBackground.setOnClickListener(v -> addProfileMenu.collapse());
-        addProfileMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
-            @Override
-            public void onMenuExpanded() {
-                menuBackground.setVisibility(View.VISIBLE);
-            }
+//        final View menuBackground = findViewById(R.id.add_profile_menu_background);
+//        menuBackground.setVisibility(View.GONE);
+//        menuBackground.setOnClickListener(v -> addProfileMenu.collapse());
+//        addProfileMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
+//            @Override
+//            public void onMenuExpanded() {
+//                menuBackground.setVisibility(View.VISIBLE);
+//            }
 
-            @Override
-            public void onMenuCollapsed() {
-                menuBackground.setVisibility(View.GONE);
-            }
-        });
+//            @Override
+//            public void onMenuCollapsed() {
+//                menuBackground.setVisibility(View.GONE);
+//            }
+//        });
         final FloatingActionButton addStoredOperationProfile = findViewById(R.id.action_add_duet_machine);
         addStoredOperationProfile.setOnClickListener(v -> {
-            addProfileMenu.collapse();
+//            addProfileMenu.collapse();
             addNewProfile(false);
         });
 
@@ -87,10 +86,13 @@ public class ProfileListActivity
 
         ((TextView) findViewById(R.id.add_profile_text)).setText(Html.fromHtml(getString(R.string.add_profile_description), FROM_HTML_MODE_COMPACT));
 
-        int profileCount = setupListView();
+        Profile lastOpenProfile = setupListView();
+        if (lastOpenProfile != null) {
+            openProfile(lastOpenProfile);
+        }
     }
 
-    private int setupListView() {
+    private Profile setupListView() {
         ListView listView = findViewById(R.id.profileList);
         List<Profile> profiles = Profile.loadAll(getApplicationContext());
         final ProfileAdapter adapter = new ProfileAdapter(this, profiles);
@@ -102,7 +104,8 @@ public class ProfileListActivity
         });
         listView.setOnItemClickListener((parent, view, position, id) -> onProfileClick(adapter, position));
         showOrHideProfileList(listView, profiles);
-        return profiles.size();
+
+        return Profile.getLastOpenProfile(this, profiles);
     }
 
     private void showOrHideProfileList(ListView listView, List<Profile> profiles) {
@@ -120,8 +123,11 @@ public class ProfileListActivity
     @Override
     public void onRestart() {
         selectedProfile = null;
-        setupListView();
+        Profile lastOpenProfile = setupListView();
         setMenuVisibility();
+        if (lastOpenProfile != null) {
+            openProfile(lastOpenProfile);
+        }
         super.onRestart();
     }
 
@@ -191,6 +197,7 @@ public class ProfileListActivity
         ProfileAdapter adapter = (ProfileAdapter) listView.getAdapter();
         adapter.setProfiles(profiles);
         adapter.notifyDataSetChanged();
+        Profile.setLastOpenProfile(this, null);
         showOrHideProfileList(listView, profiles);
     }
 
@@ -245,6 +252,10 @@ public class ProfileListActivity
 
     private void onProfileClick(ProfileAdapter adapter, int position) {
         Profile profile = (Profile) adapter.getItem(position);
+        openProfile(profile);
+    }
+
+    private void openProfile(Profile profile) {
         Intent intent = new Intent(this, JogActivity.class);
         intent.putExtra(Profile.class.getCanonicalName(), profile);
         startActivity(intent);

@@ -44,38 +44,14 @@
     <!--app:miniFabDrawableTint="?attr/colorPrimaryDark"-->
     <!--app:miniFabTitleTextColor="?attr/colorPrimaryDark" />-->
 
-    <LinearLayout
-        android:id="@+id/add_profile_menu_background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/transparent"
-        android:clickable="true"
-        android:orientation="vertical" />
-
-    <com.getbase.floatingactionbutton.FloatingActionsMenu
-        android:id="@+id/action_add_profile_menu"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/action_add_duet_machine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        app:fab_addButtonColorNormal="@color/trolololo"
-        app:fab_addButtonColorPressed="@color/trolololo"
-        app:fab_addButtonPlusIconColor="@color/white"
-        app:fab_icon="@drawable/ic_add_white_24px"
-        app:fab_labelStyle="@style/menu_labels_style">
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/action_add_duet_machine"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fab_colorNormal="@color/white"
-            app:fab_colorPressed="@color/white"
-            app:fab_icon="@drawable/ic_duet3d_logo"
-            app:fab_size="mini"
-            app:fab_title="@string/menu_item_stored_op" />
-    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+        app:backgroundTint="@color/trolololo"
+        android:clickable="true"
+        app:srcCompat="@drawable/ic_add_white_24px" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

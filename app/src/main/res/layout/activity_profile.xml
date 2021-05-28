@@ -13,16 +13,6 @@
         android:focusableInTouchMode="true"
         tools:context=".activity.ProfileActivity">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/open"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:layout_margin="@dimen/fab_margin"
-        android:clickable="true"
-        app:backgroundTint="@color/trolololo"
-        app:srcCompat="@drawable/outline_directions_run_black_48" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

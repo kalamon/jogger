@@ -152,12 +152,12 @@ public class ProfileActivity extends AppCompatActivity {
 //                actionConfig.setConfig(null);
 //            }
 //        });
-        final FloatingActionButton scan = findViewById(R.id.open);
-        scan.setOnClickListener(v -> {
-            Intent intent = new Intent(ProfileActivity.this, JogActivity.class);
-            intent.putExtra(Profile.class.getCanonicalName(), profile);
-            startActivity(intent);
-        });
+//        final FloatingActionButton scan = findViewById(R.id.open);
+//        scan.setOnClickListener(v -> {
+//            Intent intent = new Intent(ProfileActivity.this, JogActivity.class);
+//            intent.putExtra(Profile.class.getCanonicalName(), profile);
+//            startActivity(intent);
+//        });
 //        fieldOrStoredOpView.setOnTouchListener((v, event) -> {
 //            v.performClick();
 //            if (event.getAction() == MotionEvent.ACTION_DOWN) {

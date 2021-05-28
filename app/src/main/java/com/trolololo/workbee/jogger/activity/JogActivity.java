@@ -40,6 +40,7 @@ public class JogActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         profile = (Profile) getIntent().getSerializableExtra(Profile.class.getCanonicalName());
+        Profile.setLastOpenProfile(this, profile);
 
         setContentView(R.layout.activity_jog);
 
@@ -56,6 +57,7 @@ public class JogActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
+            Profile.setLastOpenProfile(this, null);
             finish();
             return true;
         }
