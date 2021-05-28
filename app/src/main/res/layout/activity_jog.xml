@@ -1,27 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <RelativeLayout
-        android:id="@+id/loadingPanel"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center" >
+        android:orientation="vertical">
 
-        <ProgressBar
-            android:id="@+id/loadingPanelSpinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true" />
-    </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="0"
+            android:orientation="horizontal">
 
-    <WebView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/background_light"
-        android:id="@+id/scan_result_log" />
+            <Button
+                android:id="@+id/button"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:width="96dp"
+                android:text="B1" />
 
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:width="96dp"
+                android:text="B2" />
+
+        </LinearLayout>
+
+        <com.trolololo.workbee.jogger.activity.Jogger
+            android:id="@+id/imageView3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:foreground="@drawable/ic_jog"
+            android:foregroundGravity="fill_horizontal|fill_vertical" />
+    </LinearLayout>
 
 </FrameLayout>

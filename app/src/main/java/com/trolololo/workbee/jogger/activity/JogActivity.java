@@ -2,21 +2,15 @@ package com.trolololo.workbee.jogger.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
-import android.view.View;
-import android.webkit.WebView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.trolololo.workbee.jogger.R;
 import com.trolololo.workbee.jogger.assetupdate.AssetUpdateFinished;
 import com.trolololo.workbee.jogger.assetupdate.AssetUpdateState;
@@ -24,10 +18,8 @@ import com.trolololo.workbee.jogger.assetupdate.AssetUpdateStateMachine;
 import com.trolololo.workbee.jogger.domain.Profile;
 import com.trolololo.workbee.jogger.network.NetworkFragment;
 
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-
 public class JogActivity extends AppCompatActivity {
+    private static final String TAG = JogActivity.class.getName();
 
     private Profile profile;
 
@@ -42,14 +34,13 @@ public class JogActivity extends AppCompatActivity {
         profile = (Profile) getIntent().getSerializableExtra(Profile.class.getCanonicalName());
         Profile.setLastOpenProfile(this, profile);
 
+        setTitle(profile.getUrl());
         setContentView(R.layout.activity_jog);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         networkFragment = new ViewModelProvider(this).get(NetworkFragment.class);
         networkFragment.attach(this);
-
-        initLog();
     }
 
     @Override
@@ -153,9 +144,9 @@ public class JogActivity extends AppCompatActivity {
     }
 
     private void showUpdatingMessageInLog() {
-        findViewById(R.id.scan_result_log).setVisibility(View.GONE);
-        ((ProgressBar) findViewById(R.id.loadingPanelSpinner)).getIndeterminateDrawable().setColorFilter(Color.parseColor("#CECECE"), PorterDuff.Mode.SRC_ATOP);
-        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+//        findViewById(R.id.scan_result_log).setVisibility(View.GONE);
+//        ((ProgressBar) findViewById(R.id.loadingPanelSpinner)).getIndeterminateDrawable().setColorFilter(Color.parseColor("#CECECE"), PorterDuff.Mode.SRC_ATOP);
+//        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
     }
 
     private String retrieveItemId(String scanResult) {
@@ -167,21 +158,21 @@ public class JogActivity extends AppCompatActivity {
     }
 
     private void initLog() {
-        WebView log = findViewById(R.id.scan_result_log);
-        if (logContent.length() == 0) {
-            log.loadDataWithBaseURL(null, "<html><body>" + getString(R.string.empty_scan_log) + "</body></html>", "text/html", "utf-8", null);
-        }
+//        WebView log = findViewById(R.id.scan_result_log);
+//        if (logContent.length() == 0) {
+//            log.loadDataWithBaseURL(null, "<html><body>" + getString(R.string.empty_scan_log) + "</body></html>", "text/html", "utf-8", null);
+//        }
     }
 
     private void addToLog(String text, boolean withDate) {
-        WebView log = findViewById(R.id.scan_result_log);
-        log.setVisibility(View.VISIBLE);
-        findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-        if (withDate) {
-            logContent.append(DateTimeFormat.shortDateTime().print(DateTime.now())).append(": ");
-        }
-        logContent.append(text);
-        logContent.append("<br/>");
-        log.loadDataWithBaseURL(null, "<html><body>" + logContent.toString() + "</body></html>", "text/html", "utf-8", null);
+//        WebView log = findViewById(R.id.scan_result_log);
+//        log.setVisibility(View.VISIBLE);
+//        findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+//        if (withDate) {
+//            logContent.append(DateTimeFormat.shortDateTime().print(DateTime.now())).append(": ");
+//        }
+//        logContent.append(text);
+//        logContent.append("<br/>");
+//        log.loadDataWithBaseURL(null, "<html><body>" + logContent.toString() + "</body></html>", "text/html", "utf-8", null);
     }
 }

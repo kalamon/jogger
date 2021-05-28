@@ -45,7 +45,6 @@ public class ProfileAdapter extends BaseAdapter {
 
     private static class ViewHolder {
         TextView urlView;
-        TextView fieldView;
         ImageView image;
     }
 
@@ -58,7 +57,6 @@ public class ProfileAdapter extends BaseAdapter {
             holder = new ViewHolder();
 
             holder.urlView = convertView.findViewById(R.id.profile_list_entry_url);
-            holder.fieldView = convertView.findViewById(R.id.profile_list_entry_field_or_storedop);
             holder.image = convertView.findViewById(R.id.profile_type_icon);
             convertView.setTag(holder);
         } else {
@@ -66,11 +64,6 @@ public class ProfileAdapter extends BaseAdapter {
         }
 
         holder.urlView.setText(p.getUrl());
-        holder.fieldView.setText(p.isLegacyDateFieldProfile() ? p.getField() : p.getOperationName());
-//        holder.image.setImageResource(p.isLegacyDateFieldProfile()
-//            ? R.drawable.ic_date_range_black_24dp
-//            : R.drawable.ic_play_circle_outline_black_24dp
-//        );
         convertView.setBackgroundResource(p.isSelected() ? R.color.lightGrey : R.color.white);
         return convertView;
     }

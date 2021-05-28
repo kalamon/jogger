@@ -56,20 +56,9 @@ public class AssetUpdateStateMachine {
         this.profile = profile;
         this.finishCallback = finishCallback;
 
-        if (profile.isLegacyDateFieldProfile()) {
-            ImmutableMap.Builder<String, AssetUpdatePhase> builder = ImmutableMap.<String, AssetUpdatePhase>builder()
-                .put("initial", new GetAsset(context, assetId, "getAssetType", "error"))
-                .put("getAssetType", new GetAssetType(context, "updateDateField", "maybeAddDateField", "error"))
-                .put("maybeAddDateField", new MaybeAddDateField(context, profile, assetId, "getDateField", "error"))
-                .put("getDateField", new GetDateField(context, profile, "addDateField", "error"))
-                .put("addDateField", new AddDateField(context, "updateDateField", "error"))
-                .put("updateDateField", new UpdateDateField(context, assetId, "end", "error"));
-            scanStates = addEndAndErrorStates(context, builder).build();
-        } else {
             ImmutableMap.Builder<String, AssetUpdatePhase> builder = ImmutableMap.<String, AssetUpdatePhase>builder()
                 .put("initial", new RunStoredOperation(context, assetId, "end", "error"));
             scanStates = addEndAndErrorStates(context, builder).build();
-        }
     }
 
     private ImmutableMap.Builder<String, AssetUpdatePhase> addEndAndErrorStates(

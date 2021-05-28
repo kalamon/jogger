@@ -19,8 +19,8 @@ public class GetDateField extends AbstractAssetUpdatePhase {
     protected void runInternal(
             NetworkFragment fragment, final Profile profile, final AssetUpdateState state, final AssetUpdatePhaseFinished callback) {
         fragment.get(
-                profile.getUrl() + "/rest/com-spartez-ephor/1.0/fieldtype/" + profile.getField(),
-                profile.getLogin(), profile.getPassword(),
+                profile.getUrl() + "/rest/com-spartez-ephor/1.0/fieldtype/",
+                null, null,
                 new BaseNetworkCallback(getContext()) {
                     @Override
                     public void finished() {

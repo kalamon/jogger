@@ -22,7 +22,7 @@ public class GetAsset extends AbstractAssetUpdatePhase {
     public void runInternal(NetworkFragment fragment, Profile profile, final AssetUpdateState state, final AssetUpdatePhaseFinished callback) {
         fragment.get(
                 profile.getUrl() + "/rest/com-spartez-ephor/1.0/item/" + assetId,
-                profile.getLogin(), profile.getPassword(), new BaseNetworkCallback(getContext()) {
+                null, null, new BaseNetworkCallback(getContext()) {
             @Override
             public void finished() {
                 if (getResult().json != null && getResult().json instanceof JsonObject) {

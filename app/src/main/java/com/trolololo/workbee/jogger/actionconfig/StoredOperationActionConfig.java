@@ -13,7 +13,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.trolololo.workbee.jogger.R;
 import com.trolololo.workbee.jogger.adapter.NameAndIdWrapper;
-import com.trolololo.workbee.jogger.adapter.StoredOpAdapter;
 import com.trolololo.workbee.jogger.domain.Profile;
 import com.trolololo.workbee.jogger.network.BaseNetworkCallback;
 import com.trolololo.workbee.jogger.network.JsonOp;
@@ -34,13 +33,6 @@ public class StoredOperationActionConfig extends AbstractProfileActionConfig {
 
     @Override
     public void setConfig(NameAndIdWrapper storedOp) {
-        if (storedOp != null) {
-            profile.setOperationId(storedOp.getId());
-            profile.setOperationName(storedOp.getName());
-        } else {
-            profile.setOperationId(0);
-            profile.setOperationName(null);
-        }
     }
 
     @Override
@@ -79,9 +71,9 @@ public class StoredOperationActionConfig extends AbstractProfileActionConfig {
             int selection = 0;
             int i = 0;
             for (NameAndIdWrapper storedOp : storedOps) {
-                if (storedOp.getId() == profile.getOperationId()) {
-                    selection = i;
-                }
+//                if (storedOp.getId() == profile.getOperationId()) {
+//                    selection = i;
+//                }
                 ++i;
             }
             if (storedOps.size() == 0) {

@@ -24,8 +24,8 @@ public class RunStoredOperation extends AbstractAssetUpdatePhase {
     @Override
     protected void runInternal(NetworkFragment fragment, final Profile profile, final AssetUpdateState state, final AssetUpdatePhaseFinished callback) {
         fragment.post(
-                profile.getUrl() + "/rest/com-spartez-ephor/1.0/stored-operation/" + profile.getOperationId() + "/execute",
-                profile.getLogin(), profile.getPassword(), ImmutableList.of(assetId),
+                profile.getUrl() + "/rest/com-spartez-ephor/1.0/stored-operation/execute",
+                null, null, ImmutableList.of(assetId),
                 new BaseNetworkCallback(getContext()) {
                     @Override
                     public void finished() {

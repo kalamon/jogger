@@ -38,7 +38,7 @@ public class GetAssetType extends AbstractAssetUpdatePhase {
         String itemType = type.getAsString();
         fragment.get(
                 profile.getUrl() + "/rest/com-spartez-ephor/1.0/itemtype/" + itemType,
-                profile.getLogin(), profile.getPassword(), new BaseNetworkCallback(getContext()) {
+                null, null, new BaseNetworkCallback(getContext()) {
             @Override
             public void finished() {
                 if (getResult().json != null && getResult().json instanceof JsonObject) {
@@ -61,7 +61,7 @@ public class GetAssetType extends AbstractAssetUpdatePhase {
                 JsonObject type = field.getAsJsonObject().get("type").getAsJsonObject();
                 if (type != null) {
                     JsonElement fieldName = type.get("name");
-                    if (fieldName != null && Objects.equal(fieldName.getAsString(), profile.getField())) {
+                    if (fieldName != null && Objects.equal(fieldName.getAsString(), null)) {
                         state.setFieldDefinition(field.getAsJsonObject());
                         haveField = true;
                         break;

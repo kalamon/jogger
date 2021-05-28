@@ -1,6 +1,5 @@
 package com.trolololo.workbee.jogger.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -14,14 +13,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.trolololo.workbee.jogger.R;
 import com.trolololo.workbee.jogger.actionconfig.AbstractProfileActionConfig;
-import com.trolololo.workbee.jogger.actionconfig.DateFieldActionConfig;
 import com.trolololo.workbee.jogger.actionconfig.StoredOperationActionConfig;
 import com.trolololo.workbee.jogger.domain.Profile;
 import com.trolololo.workbee.jogger.network.BaseNetworkCallback;
@@ -71,7 +68,7 @@ public class ProfileActivity extends AppCompatActivity {
         networkFragment.attach(this);
 
         setContentView(R.layout.activity_profile);
-
+        setTitle(R.string.edit_profile);
         EditText url = findViewById(R.id.url);
 
         profile = (Profile) getIntent().getSerializableExtra(Profile.class.getCanonicalName());
@@ -81,16 +78,13 @@ public class ProfileActivity extends AppCompatActivity {
         } else {
             profile = new Profile();
             Boolean legacy = (Boolean) getIntent().getSerializableExtra(Profile.class.getCanonicalName() + ".legacy");
-            profile.setLegacyDateFieldProfile(legacy != null && legacy);
             url.setText("http://");
             url.setSelection(url.getText().length());
             url.setFocusableInTouchMode(true);
             url.requestFocus();
         }
-        actionConfig = profile.isLegacyDateFieldProfile()
-            ? new DateFieldActionConfig(ProfileActivity.this, profile, networkFragment)
-            : new StoredOperationActionConfig(ProfileActivity.this, profile, networkFragment);
-        setEventListeners(url, profile.isLegacyDateFieldProfile());
+        actionConfig = new StoredOperationActionConfig(ProfileActivity.this, profile, networkFragment);
+        setEventListeners(url);
         testCalls.add(actionConfig.addTestNetworkCall());
     }
 
@@ -131,7 +125,7 @@ public class ProfileActivity extends AppCompatActivity {
         return actionConfig.validate();
     }
 
-    private void setEventListeners(TextView urlView, final boolean legacyDateFieldProfile) {
+    private void setEventListeners(TextView urlView) {
         urlView.addTextChangedListener(new TextWatcherAdapter() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {

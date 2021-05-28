@@ -31,7 +31,7 @@ public class AddDateField extends AbstractAssetUpdatePhase {
         String itemType = type.getAsString();
         fragment.post(
                 profile.getUrl() + "/rest/com-spartez-ephor/1.0/itemtypefield/" + itemType,
-                profile.getLogin(), profile.getPassword(), getFieldDefinition(state),
+                null, null, getFieldDefinition(state),
                 new BaseNetworkCallback(getContext()) {
             @Override
             public void finished() {

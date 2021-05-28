@@ -25,7 +25,7 @@ public class UpdateDateField extends AbstractAssetUpdatePhase {
     protected void runInternal(NetworkFragment fragment, final Profile profile, final AssetUpdateState state, final AssetUpdatePhaseFinished callback) {
         fragment.post(
                 profile.getUrl() + "/rest/com-spartez-ephor/1.0/item/" + assetId + "/field/-1?fielddef=" + state.getFieldDefinition().get("id").getAsInt(),
-                profile.getLogin(), profile.getPassword(), ImmutableList.of(DateTime.now().toDate().getTime()),
+                null, null, ImmutableList.of(DateTime.now().toDate().getTime()),
                 new BaseNetworkCallback(getContext()) {
                     @Override
                     public void finished() {

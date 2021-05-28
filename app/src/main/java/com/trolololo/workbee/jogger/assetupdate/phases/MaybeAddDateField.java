@@ -45,7 +45,7 @@ public class MaybeAddDateField extends AbstractAssetUpdatePhase {
             return;
         }
         final AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(getContext());
-        dlgAlert.setMessage(String.format(getContext().getString(R.string.create_date_field), profile.getField(), assetId, assetTypeName));
+        dlgAlert.setMessage(String.format(getContext().getString(R.string.create_date_field), null, assetId, assetTypeName));
         DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
@@ -72,7 +72,7 @@ public class MaybeAddDateField extends AbstractAssetUpdatePhase {
     }
 
     private void triggerNo(AssetUpdatePhase phase, AssetUpdateState state, String assetId, String assetTypeName, AssetUpdatePhaseFinished callback) {
-        state.setGeneralError(String.format(getContext().getString(R.string.field_not_in_asset_type), profile.getField(), assetId, assetTypeName));
+        state.setGeneralError(String.format(getContext().getString(R.string.field_not_in_asset_type), null, assetId, assetTypeName));
         callback.error(phase, state);
     }
 }
