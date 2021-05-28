@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -11,17 +11,17 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:focusableInTouchMode="true"
-        tools:context="com.spartez.assettracker.checkin.activity.ProfileActivity">
+        tools:context=".activity.ProfileActivity">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/scan"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/open"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
         android:layout_margin="@dimen/fab_margin"
         android:clickable="true"
-        app:backgroundTint="@color/spartez"
-        app:srcCompat="@drawable/ic_iconmonstr_qr_code_2" />
+        app:backgroundTint="@color/trolololo"
+        app:srcCompat="@drawable/outline_directions_run_black_48" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -41,7 +41,7 @@
                 android:layout_gravity="fill_horizontal"
                 android:layout_row="1"
                 android:ems="10"
-                android:hint="@string/jira_url"
+                android:hint="@string/machine_url"
                 android:inputType="textUri" />
 
             <TextView
@@ -52,97 +52,6 @@
                 android:ems="10"
                 android:labelFor="@+id/url"
                 android:text="@string/url" />
-
-            <EditText
-                android:id="@+id/login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_columnSpan="2"
-                android:layout_gravity="fill_horizontal"
-                android:layout_row="2"
-                android:ems="10"
-                android:hint="@string/login_name"
-                android:inputType="text" />
-
-            <TextView
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:layout_column="0"
-                android:layout_row="2"
-                android:ems="10"
-                android:labelFor="@+id/login"
-                android:text="@string/login" />
-
-            <TextView
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:layout_column="0"
-                android:layout_row="3"
-                android:ems="10"
-                android:labelFor="@+id/password"
-                android:text="@string/password" />
-
-            <EditText
-                android:id="@+id/password"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_columnSpan="2"
-                android:layout_gravity="fill_horizontal"
-                android:layout_row="3"
-                android:ems="10"
-                android:hint="@string/password"
-                android:inputType="textPassword" />
-
-            <TextView
-                android:id="@+id/field_name"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:layout_column="0"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="0dp"
-                android:layout_row="4"
-                android:ems="10"
-                android:labelFor="@+id/field"
-                android:text="@string/field" />
-
-            <Spinner
-                android:id="@+id/field"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_columnSpan="2"
-                android:layout_gravity="fill_horizontal"
-                android:layout_row="4"
-                android:dropDownWidth="wrap_content"
-                android:minHeight="50dp"
-            />
-
-            <TextView
-                android:id="@+id/storedop_name"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:layout_column="0"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="0dp"
-                android:layout_row="5"
-                android:ems="10"
-                android:labelFor="@+id/storedop"
-                android:text="@string/storedop" />
-
-            <Spinner
-                android:id="@+id/storedop"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_column="1"
-                android:layout_columnSpan="2"
-                android:layout_gravity="fill_horizontal"
-                android:layout_row="5"
-                android:dropDownWidth="wrap_content"
-                android:minHeight="50dp"
-                />
-
         </GridLayout>
     </ScrollView>
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

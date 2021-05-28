@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.spartez.assettracker.checkin.activity.ProfileListActivity">
+    tools:context=".activity.ProfileListActivity">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"
         app:elevation="0dp">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/content_profile_list" />
 
@@ -61,30 +61,21 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        app:fab_addButtonColorNormal="@color/spartez"
-        app:fab_addButtonColorPressed="@color/spartez"
+        app:fab_addButtonColorNormal="@color/trolololo"
+        app:fab_addButtonColorPressed="@color/trolololo"
         app:fab_addButtonPlusIconColor="@color/white"
         app:fab_icon="@drawable/ic_add_white_24px"
         app:fab_labelStyle="@style/menu_labels_style">
 
         <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/action_add_stored_op_profile"
+            android:id="@+id/action_add_duet_machine"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:fab_colorNormal="@color/white"
             app:fab_colorPressed="@color/white"
-            app:fab_icon="@drawable/ic_play_circle_outline_black_24dp"
+            app:fab_icon="@drawable/ic_duet3d_logo"
             app:fab_size="mini"
             app:fab_title="@string/menu_item_stored_op" />
-
-        <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/action_add_date_field_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fab_colorNormal="@color/white"
-            app:fab_colorPressed="@color/white"
-            app:fab_icon="@drawable/ic_date_range_black_24dp"
-            app:fab_size="mini"
-            app:fab_title="@string/menu_item_date_field" />
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
-</android.support.design.widget.CoordinatorLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -3,21 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.spartez.assettracker.checkin.ProfileListActivity_Old">
     <item
-        android:id="@+id/action_scan"
-        android:orderInCategory="100"
-        android:title="@string/action_scan"
-        android:icon="@drawable/ic_iconmonstr_qr_code_2"
-        app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/action_copy"
-        android:orderInCategory="101"
-        android:title="@string/action_copy"
-        android:icon="@drawable/ic_content_copy_white_24px"
-        app:showAsAction="ifRoom" />
+        android:id="@+id/action_edit"
+        android:title="@string/action_edit"
+        app:showAsAction="always" />
     <item
         android:id="@+id/action_delete"
+        android:icon="@drawable/ic_delete_white_24px"
         android:orderInCategory="101"
         android:title="@string/action_delete"
-        android:icon="@drawable/ic_delete_white_24px"
         app:showAsAction="ifRoom" />
 </menu>

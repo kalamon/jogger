@@ -1,26 +1,27 @@
 <resources>
-    <string name="app_name">Asset Label Scanner</string>
-    <string name="app_full_name">Asset Tracker\nLabel Scanner</string>
-    <string name="app_main_name">Label Scanner</string>
+    <string name="app_name">Duet CNC Jogger</string>
+    <string name="app_full_name">Duet CNC Jogger</string>
+    <string name="app_main_name">Duet Jogger</string>
 
     <string name="action_scan">Scan</string>
     <string name="action_delete">Delete</string>
-    <string name="title_activity_profile_list">Scan profiles</string>
+    <string name="action_edit">Edit</string>
+    <string name="title_activity_profile_list">Machines</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
-    <string name="confirm_delete">Do you really want to delete this profile?</string>
+    <string name="confirm_delete">Do you really want to delete this machine?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="profile">Scan profile</string>
+    <string name="profile">Machine</string>
     <string name="date_field_profile">Date field</string>
     <string name="stored_operation_profile">Operation sequence</string>
     <string name="login">Login</string>
     <string name="url">URL</string>
     <string name="password">Password</string>
-    <string name="jira_url">JIRA URL</string>
+    <string name="machine_url">Machine URL</string>
     <string name="login_name">Login name</string>
     <string name="test">Test</string>
     <string name="field">Field</string>
@@ -52,7 +53,7 @@
     <string name="scanned_invalid_qr_code_text">Scanned non-asset QR code</string>
     <string name="scanned_invalid_qr_code_html"><![CDATA[Scanned <a href=\"%1$s\">non-asset QR code</a>]]></string>
     <string name="scanned_invalid_qr_code_html_pre"><![CDATA[Scanned non-asset QR code: <pre>%1$s</pre>]]></string>
-    <string name="empty_scan_log"><![CDATA[<p style=\"padding:2em;text-align:center\">Press button below to scan QR code]]></string>
+    <string name="empty_scan_log"><![CDATA[<p style=\"padding:2em;text-align:center\">Jogger will be here]]></string>
     <string name="title_activity_settings">Settings</string>
 
     <string name="pref_header_general">General</string>
@@ -76,8 +77,8 @@
     <string name="pref_title_connect_timeout">Connect timeout in seconds</string>
     <string name="pref_description_connect_timeout">Connection timeout of a network call (in seconds)</string>
     <string name="pref_description_read_timeout">Read timeout of a network call (in seconds)</string>
-    <string name="drawer_title">Asset Tracker Label Scanner</string>
-    <string name="drawer_copyright">&#169; 2017 <![CDATA[<a href="http://spartez.com">Spartez</a>]]></string>
+    <string name="drawer_title">Duet CNC Jogger</string>
+    <string name="drawer_copyright">&#169; 2021 <![CDATA[<a href="http://trolololo-software.com">Troololo</a>]]></string>
     <string name="cannot_send_email">Unable to send email</string>
     <string name="email_client_chooser">Choose an email application</string>
     <string name="pref_title_automatic_field_creation">Automatically create date fields</string>
@@ -85,22 +86,14 @@
         When updating asset, automatically add date field to asset type definition if it is missing.
         Confirmation dialog will be displayed before field is added. Adding a field to asset type requires access to Asset Tracker administration.
     </string>
-    <string name="title_activity_about">About Asset Label Scanner</string>
+    <string name="title_activity_about">About Duet CNC Jogger</string>
     <string name="about_license"><![CDATA[
             <p>
-                A helper application for <a style=\"color: #0A7BC0\" href=\"https://spartez.com/products/asset-tracker-for-jira\">Asset Tracker for JIRA</a>
-                from Spartez.
-                It is used to scan QR code labels printed from Asset Tracker and placed on assets.
-            </p>
-            <p>
-                Scanning the label causes the selected operation sequence to be executed on an asset record,
-                or the selected date field of the asset record to be set to the current date.
-                It can be used to update assets automatically by scanning their labels and
-                to perform periodic asset checks to find which assets are present and accounted for.
+                A jogger for your Duet3D-controlled CNC.
             </p>
             <p style=\"font-size:small; text-align:center;\">
                 Licensed under <a style=\"color: #0A7BC0\" href=\"http://www.apache.org/licenses/LICENSE-2.0\">Apache License</a><br/>
-                <a style=\"color: #0A7BC0\" href=\"https://bitbucket.org/spartez/ephor-scanners\">Source code</a>
+                <a style=\"color: #0A7BC0\" href=\"https://github.com/kalamon/jogger\">Source code</a>
             </p>
         ]]>
     </string>
@@ -133,6 +126,5 @@
     </string>
     <string name="must_reindex_title">Rebuild Index</string>
     <string name="long_press_for_ops">Touch and hold profile for operations</string>
-    <string name="menu_item_stored_op">Add operation sequence profile</string>
-    <string name="menu_item_date_field">Add date field profile</string>
+    <string name="menu_item_stored_op">Add Duet3D machine</string>
 </resources>

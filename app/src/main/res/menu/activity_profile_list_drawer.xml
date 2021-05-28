@@ -14,10 +14,6 @@
                 android:id="@+id/nav_info"
                 android:icon="@drawable/ic_info_outline_black_24px"
                 android:title="@string/information" />
-            <item
-                android:id="@+id/nav_feedback"
-                android:icon="@drawable/ic_feedback_black_24px"
-                android:title="@string/feedback" />
         </menu>
     </item>
 
