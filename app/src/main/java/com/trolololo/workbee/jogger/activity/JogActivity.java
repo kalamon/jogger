@@ -5,12 +5,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.common.collect.ImmutableMap;
 import com.trolololo.workbee.jogger.R;
 import com.trolololo.workbee.jogger.assetupdate.AssetUpdateFinished;
 import com.trolololo.workbee.jogger.assetupdate.AssetUpdateState;
@@ -37,6 +39,16 @@ public class JogActivity extends AppCompatActivity {
         setTitle(profile.getUrl());
         setContentView(R.layout.activity_jog);
 
+        Jogger jogger = findViewById(R.id.jogger);
+        jogger.setButtons(this, new Buttons(this, ImmutableMap.<String, View>builder()
+                .put(Buttons.XY, findViewById(R.id.button_x_y))
+                .put(Buttons.Z, findViewById(R.id.button_z))
+                .put(Buttons.SET, findViewById(R.id.button_set))
+                .put(Buttons.STEP_BIG, findViewById(R.id.button_step_big))
+                .put(Buttons.STEP_MEDIUM, findViewById(R.id.button_step_medium))
+                .put(Buttons.STEP_SMALL, findViewById(R.id.button_step_small))
+                .build()
+        ));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         networkFragment = new ViewModelProvider(this).get(NetworkFragment.class);

@@ -13,7 +13,7 @@
    version="1.1"
    id="svg879"
    inkscape:version="1.0.2-2 (e86c870879, 2021-01-15)"
-   sodipodi:docname="jogdown.svg">
+   sodipodi:docname="jogz.svg">
   <defs
      id="defs873" />
   <sodipodi:namedview
@@ -92,7 +92,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -101,17 +101,12 @@
      inkscape:groupmode="layer"
      id="layer1">
     <path
-       style="fill:#e0e0e0;fill-opacity:0.94901961;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 75,95 c 0,0 5.02174,5.05435 0,10 l -65,65 c -3.8804296,3.72826 -4.9999996,0 -4.9999996,0 V 29.999996 c 0,0 1.19565,-3.72826 4.9999996,1e-6 z"
-       id="path1486-1"
-       sodipodi:nodetypes="ccccccc" />
-    <path
        style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 0,170 v 0"
        id="path1464"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:#808080;fill-opacity:0.94779116;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="fill:#e0e0e0;fill-opacity:0.94779116;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 95,125 c 0,0 5.05435,-5.02174 10,0 l 65,65 c 3.72826,3.88043 0,5 0,5 H 29.999999 c 0,0 -3.72826,-1.19565 1e-6,-5 z"
        id="path1486"
        sodipodi:nodetypes="ccccccc" />
@@ -121,25 +116,12 @@
        id="path1486-1-1"
        sodipodi:nodetypes="ccccccc" />
     <path
-       style="fill:#e0e0e0;fill-opacity:0.94779116;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 125,105 c 0,0 -5.02174,-5.05435 0,-10 l 65,-64.999998 c 3.88043,-3.72826 5,0 5,0 V 170 c 0,0 -1.19565,3.72826 -5,0 z"
-       id="path1486-1-1-8"
-       sodipodi:nodetypes="ccccccc" />
-    <path
        style="fill:#ffffff;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 95,15.000002 h 10 v 15 h 15 V 40 H 105 V 55.000002 H 95 V 40 H 79.999999 V 30.000002 H 95 Z"
        id="path1593" />
     <path
        style="fill:#ffffff;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 160,80.000002 h 10 v 15 h 15 V 105 h -15 v 15 h -10 v -15 h -15 v -9.999998 h 15 z"
-       id="path1593-5" />
-    <path
-       style="fill:#ffffff;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 80,165 h 40 v 10 H 80 Z"
        id="path1615" />
-    <path
-       style="fill:#ffffff;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 15,95 h 40.000001 v 10 H 15 Z"
-       id="path1615-8" />
   </g>
 </svg>

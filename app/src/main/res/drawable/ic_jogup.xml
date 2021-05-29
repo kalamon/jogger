@@ -7,9 +7,9 @@
       android:pathData="m75,95c0,0 5.022,5.054 0,10l-65,65c-3.88,3.728 -5,0 -5,0V30c0,0 1.196,-3.728 5,0z"
       android:strokeLineJoin="miter"
       android:strokeWidth="0.264583"
-      android:fillColor="#cccccc"
+      android:fillColor="#e0e0e0"
       android:strokeColor="#000000"
-      android:fillAlpha="0.94779116"
+      android:fillAlpha="0.9490196"
       android:strokeLineCap="butt"/>
   <path
       android:pathData="m0,170v0"
@@ -22,9 +22,9 @@
       android:pathData="m95,125c0,0 5.054,-5.022 10,0l65,65c3.728,3.88 0,5 0,5H30c0,0 -3.728,-1.196 0,-5z"
       android:strokeLineJoin="miter"
       android:strokeWidth="0.264583"
-      android:fillColor="#cccccc"
+      android:fillColor="#e0e0e0"
       android:strokeColor="#000000"
-      android:fillAlpha="0.94779116"
+      android:fillAlpha="0.9490196"
       android:strokeLineCap="butt"/>
   <path
       android:pathData="m105,75c0,0 -5.054,5.022 -10,0L30,10c-3.728,-3.88 0,-5 0,-5h140c0,0 3.728,1.196 0,5z"
