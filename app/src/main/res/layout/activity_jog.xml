@@ -12,35 +12,109 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="10dp"
+            android:layout_height="96dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="10dp"
             android:layout_weight="0"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button"
-                android:layout_width="96dp"
-                android:layout_height="wrap_content"
+                android:id="@+id/button_x_y"
+                android:layout_width="100dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="20dp"
                 android:width="96dp"
-                android:text="B1" />
+                android:backgroundTint="@color/colorAccent"
+                android:text="X/Y"
+                android:textSize="20sp"
+                app:cornerRadius="50dp" />
 
             <Button
-                android:id="@+id/button3"
-                android:layout_width="96dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
+                android:id="@+id/button_set"
+                android:layout_width="100dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:width="100dp"
+                android:drawableLeft="@drawable/ic_check_circle_black_24dp"
+                android:text="@string/set"
+                android:textSize="16sp"
+                app:cornerRadius="50dp" />
+
+            <Button
+                android:id="@+id/button_z"
+                android:layout_width="100dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
                 android:width="96dp"
-                android:text="B2" />
+                android:text="Z"
+                android:textSize="20sp"
+                app:cornerRadius="50dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="0"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_step_big"
+                android:layout_width="100dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="20dp"
+                android:width="110dp"
+                android:backgroundTint="@color/colorAccent"
+                android:text="50"
+                android:textSize="20sp"
+                app:cornerRadius="50dp" />
+
+            <Button
+                android:id="@+id/button_step_medium"
+                android:layout_width="100dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:width="110dp"
+                android:text="10"
+                android:textSize="20sp"
+                app:cornerRadius="50dp" />
+
+            <Button
+                android:id="@+id/button_step_small"
+                android:layout_width="100dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="20dp"
+                android:width="110dp"
+                android:text="0.1"
+                android:textSize="20sp"
+                app:cornerRadius="50dp" />
 
         </LinearLayout>
 
         <com.trolololo.workbee.jogger.activity.Jogger
-            android:id="@+id/imageView3"
+            android:id="@+id/jogger"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="20dp"
             android:layout_weight="1"
             android:foreground="@drawable/ic_jog"
             android:foregroundGravity="fill_horizontal|fill_vertical" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:background="#4CAF50"
+            android:text="Online"
+            android:textAlignment="center" />
     </LinearLayout>
 
 </FrameLayout>
