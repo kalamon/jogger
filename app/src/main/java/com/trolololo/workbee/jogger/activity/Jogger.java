@@ -2,9 +2,6 @@ package com.trolololo.workbee.jogger.activity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -14,8 +11,6 @@ import android.widget.Button;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import com.trolololo.workbee.jogger.R;
 
 import static android.view.MotionEvent.ACTION_MOVE;

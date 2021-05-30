@@ -1,43 +1,51 @@
 package com.trolololo.workbee.jogger.activity;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.trolololo.workbee.jogger.R;
-import com.trolololo.workbee.jogger.assetupdate.AssetUpdateFinished;
-import com.trolololo.workbee.jogger.assetupdate.AssetUpdateState;
-import com.trolololo.workbee.jogger.assetupdate.AssetUpdateStateMachine;
-import com.trolololo.workbee.jogger.domain.Profile;
+import com.trolololo.workbee.jogger.domain.Machine;
+import com.trolololo.workbee.jogger.network.BaseNetworkCallback;
+import com.trolololo.workbee.jogger.network.JsonOp;
+import com.trolololo.workbee.jogger.network.NetworkCall;
 import com.trolololo.workbee.jogger.network.NetworkFragment;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class JogActivity extends AppCompatActivity {
     private static final String TAG = JogActivity.class.getName();
 
-    private Profile profile;
+    private Machine machine;
 
-    private StringBuilder logContent = new StringBuilder();
-    public static final String ITEM_PREFIX = "/plugins/servlet/com.spartez.ephor/item/";
+    private NetworkFragment onlineStatusNetworkFragment;
     private NetworkFragment networkFragment;
+
+    private Timer timer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        profile = (Profile) getIntent().getSerializableExtra(Profile.class.getCanonicalName());
-        Profile.setLastOpenProfile(this, profile);
+        machine = (Machine) getIntent().getSerializableExtra(Machine.class.getCanonicalName());
+        Machine.setLastOpenProfile(this, machine);
 
-        setTitle(profile.getUrl());
+        setTitle(machine.getUrl());
         setContentView(R.layout.activity_jog);
+
+        findViewById(R.id.cover_glass).setOnClickListener(v -> {
+            // choke
+        });
 
         Jogger jogger = findViewById(R.id.jogger);
         jogger.setButtons(this, new Buttons(this, ImmutableMap.<String, View>builder()
@@ -51,8 +59,18 @@ public class JogActivity extends AppCompatActivity {
         ));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        onlineStatusNetworkFragment = new ViewModelProvider(this).get("online_status", NetworkFragment.class);
+        onlineStatusNetworkFragment.attach(this);
         networkFragment = new ViewModelProvider(this).get(NetworkFragment.class);
         networkFragment.attach(this);
+
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                testOnline();
+            }
+        }, 1000, 10000);
     }
 
     @Override
@@ -60,7 +78,8 @@ public class JogActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            Profile.setLastOpenProfile(this, null);
+            Machine.setLastOpenProfile(this, null);
+            cancelAll();
             finish();
             return true;
         }
@@ -68,123 +87,63 @@ public class JogActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void doScan() {
-        // continuous scan with buttons and stuff
-//        Intent intent = new Intent(this, ContinuousCaptureActivity.class);
-//        startActivity(intent);
-
-        // scanner with toolbar
-//        new IntentIntegrator(this).setCaptureActivity(ToolbarCaptureActivity.class).initiateScan();
-
-//        IntentIntegrator integrator = new IntentIntegrator(this);
-//        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-//        integrator.setPrompt(getString(R.string.scan_qrcode_prompt));
-//        integrator.setBarcodeImageEnabled(false);
-//        integrator.setOrientationLocked(false);
-//        integrator.setCaptureActivity(CustomScannerActivity.class);
-//        integrator.initiateScan();
+    private void cancelAll() {
+        onlineStatusNetworkFragment.cancel();
+        networkFragment.cancel();
+        timer.cancel();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-//        if(result != null) {
-//            String value = result.getContents();
-//            if(value != null) {
-//                String itemId = retrieveItemId(value);
-//                if (itemId == null) {
-//                    if (value.startsWith("http://") || value.startsWith("https://")) {
-//                        addToLog(String.format(getString(R.string.scanned_invalid_qr_code_html), value), true);
-//                    } else {
-//                        addToLog(String.format(getString(R.string.scanned_invalid_qr_code_html_pre), value), true);
-//                    }
-//                    Toast.makeText(this, getString(R.string.scanned_invalid_qr_code_text), Toast.LENGTH_LONG).show();
-//                    maybeScanAgain();
-//                } else {
-//                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-//                    boolean forceSameJiraUrl = preferences.getBoolean("force_same_jira_url", true);
-//                    if (forceSameJiraUrl && !jiraUrlMatches(value)) {
-//                        String message = String.format(getString(R.string.jira_url_does_not_match), value, profile.getUrl());
-//                        addToLog(message, true);
-//                        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-//                    } else {
-//                        runAssetUpdate(getAssetId(value), value);
-//                    }
-//                }
-//            }
-//        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-//        }
-    }
-
-    private boolean jiraUrlMatches(String value) {
-        return value.toLowerCase().startsWith(profile.getUrl().toLowerCase());
-    }
-
-    private String getAssetId(String url) {
-        int beginIndex = url.lastIndexOf("/");
-        if (beginIndex < 0 || url.length() < beginIndex + 1) {
-            return "NONE";
+    private final NetworkCall isOnlineNetworkCall = new NetworkCall() {
+        public String getUrl() { return "/rr_status?type=1"; }
+        public String describe() { return getString(R.string.rr_status); }
+        public String fromResult(JsonElement result) {
+            JsonArray a = result.getAsJsonArray();
+            return String.format(getString(R.string.rr_status_result), a.size());
         }
-        return url.substring(beginIndex + 1);
+    };
+
+    private void testOnline() {
+        onlineStatusNetworkFragment.cancel();
+        onlineStatusNetworkFragment.get(machine.getUrl() + isOnlineNetworkCall.getUrl(), null, null,
+                new BaseNetworkCallback(JogActivity.this) {
+                    @Override
+                    public void finished() {
+                        onlineStatusNetworkFragment.cancel();
+                    }
+
+                    @Override
+                    public void update(JsonOp.Result result) {
+                        if (result != null) {
+                            Object resultString = result.getResultString(JogActivity.this);
+                            Log.i(TAG, "Received testOnline() result: " + resultString);
+                            OnlineLabel label = findViewById(R.id.online_label);
+                            boolean online = result.exception == null && result.json != null;
+                            String text = online ? getHomeAndCoords(result.json) : getString(R.string.offline);
+                            label.setOnline(online, text);
+                            findViewById(R.id.cover_glass).setVisibility(online ? View.GONE : View.VISIBLE);
+                        }
+                    }
+                }
+        );
     }
 
-    private void runAssetUpdate(final String itemId, final String itemUrl) {
-        showUpdatingMessageInLog();
-        AssetUpdateStateMachine stateMachine = new AssetUpdateStateMachine(this, itemId, networkFragment, profile, new AssetUpdateFinished() {
-            @Override
-            public void success(AssetUpdateState state) {
-                addToLog(String.format(getString(R.string.scanned_qr_code_html), itemUrl, itemId), true);
-                Toast.makeText(JogActivity.this, String.format(getString(R.string.scanned_qr_code_text), itemId), Toast.LENGTH_LONG).show();
-                maybeScanAgain();
-            }
-
-            @Override
-            public void error(AssetUpdateState state) {
-                addToLog(state.getErrorString(), true);
-            }
-        });
-        stateMachine.run();
-    }
-
-    private void maybeScanAgain() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(JogActivity.this);
-        boolean automaticContinuation = preferences.getBoolean("automatic_scan_continuation", false);
-        if (automaticContinuation) {
-            doScan();
+    private String getHomeAndCoords(JsonElement json) {
+        try {
+            JsonObject o = json.getAsJsonObject();
+            JsonObject coords = o.get("coords").getAsJsonObject();
+            JsonArray axesHomed = coords.get("axesHomed").getAsJsonArray();
+            boolean xHomed = axesHomed.get(0).getAsInt() > 0;
+            boolean yHomed = axesHomed.get(1).getAsInt() > 0;
+            boolean zHomed = axesHomed.get(2).getAsInt() > 0;
+            JsonArray xyz = coords.get("xyz").getAsJsonArray();
+            float x = xyz.get(0).getAsFloat();
+            float y = xyz.get(1).getAsFloat();
+            float z = xyz.get(2).getAsFloat();
+            boolean homed = xHomed && yHomed && zHomed;
+            return String.format(getString(R.string.home_and_coords), homed ? "Homed" : "Not homed", x, y, z);
+        } catch (Exception e) {
+            Log.w(TAG, e);
+            return getString(R.string.error);
         }
-    }
-
-    private void showUpdatingMessageInLog() {
-//        findViewById(R.id.scan_result_log).setVisibility(View.GONE);
-//        ((ProgressBar) findViewById(R.id.loadingPanelSpinner)).getIndeterminateDrawable().setColorFilter(Color.parseColor("#CECECE"), PorterDuff.Mode.SRC_ATOP);
-//        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
-    }
-
-    private String retrieveItemId(String scanResult) {
-        int sub = scanResult.indexOf(ITEM_PREFIX);
-        if (sub < 0) {
-            return null;
-        }
-        return scanResult.substring(sub + ITEM_PREFIX.length());
-    }
-
-    private void initLog() {
-//        WebView log = findViewById(R.id.scan_result_log);
-//        if (logContent.length() == 0) {
-//            log.loadDataWithBaseURL(null, "<html><body>" + getString(R.string.empty_scan_log) + "</body></html>", "text/html", "utf-8", null);
-//        }
-    }
-
-    private void addToLog(String text, boolean withDate) {
-//        WebView log = findViewById(R.id.scan_result_log);
-//        log.setVisibility(View.VISIBLE);
-//        findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-//        if (withDate) {
-//            logContent.append(DateTimeFormat.shortDateTime().print(DateTime.now())).append(": ");
-//        }
-//        logContent.append(text);
-//        logContent.append("<br/>");
-//        log.loadDataWithBaseURL(null, "<html><body>" + logContent.toString() + "</body></html>", "text/html", "utf-8", null);
     }
 }

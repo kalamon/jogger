@@ -38,8 +38,7 @@ public class Buttons {
         .put(STEP_SMALL + Z, "0.05")
         .build();
 
-    private Context context;
-    private Map<String, View> buttonMap;
+    private SharedPreferences preferences;
     private Function<Void, Void> onZCallback;
     private Function<Void, Void> onXYCallback;
     private Function<Void, Void> onBigCallback;
@@ -53,8 +52,7 @@ public class Buttons {
     private boolean isSmall = false;
 
     public Buttons(Context context, Map<String, View> buttonMap) {
-        this.context = context;
-        this.buttonMap = buttonMap;
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         View buttonZ = buttonMap.get(Z);
         buttonZ.setOnTouchListener((v, event) -> {
@@ -180,6 +178,7 @@ public class Buttons {
             onSmallCallback.apply(null);
         }
     }
+
     private boolean isPush(MotionEvent event) {
         int action = event.getAction();
         int toolType = event.getToolType(0);
@@ -190,7 +189,6 @@ public class Buttons {
     }
 
     private String load(String key, String defaultValue) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String result = preferences.getString(Buttons.class.getCanonicalName()  + "." + key, defaultValue);
 //        Log.i(TAG, "load " + key + ": " + result);
         return result;
@@ -198,7 +196,6 @@ public class Buttons {
 
     private void save(String key, String value) {
 //        Log.i(TAG, "save " + key + ": " + value);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(Buttons.class.getCanonicalName()  + "." + key, value);
         editor.commit();

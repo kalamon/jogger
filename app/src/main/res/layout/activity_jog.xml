@@ -37,7 +37,7 @@
                 android:layout_height="80dp"
                 android:layout_gravity="center"
                 android:width="100dp"
-                android:drawableLeft="@drawable/ic_check_circle_black_24dp"
+                android:drawableLeft="@drawable/ic_check_circle_white_24px"
                 android:text="@string/set"
                 android:textSize="16sp"
                 app:cornerRadius="50dp" />
@@ -107,14 +107,25 @@
             android:foreground="@drawable/ic_jog"
             android:foregroundGravity="fill_horizontal|fill_vertical" />
 
-        <TextView
-            android:id="@+id/textView"
+        <com.trolololo.workbee.jogger.activity.OnlineLabel
+            android:id="@+id/online_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:background="#4CAF50"
-            android:text="Online"
+            android:height="20dp"
+            android:background="@color/lightGrey"
             android:textAlignment="center" />
+
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/cover_glass"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20dp"
+        android:background="#20000000"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        tools:visibility="visible" />
 
 </FrameLayout>

@@ -8,6 +8,7 @@
 
     <application
         android:allowBackup="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:icon="@drawable/outline_directions_run_black_48"
         android:label="@string/app_main_name"
         android:supportsRtl="true"
@@ -17,14 +18,14 @@
             android:name=".activity.JogActivity"
             android:configChanges="orientation|screenSize" />
         <activity
-            android:name=".activity.ProfileActivity"
+            android:name=".activity.MachineActivity"
             android:configChanges="orientation|screenSize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.ProfileListActivity" />
+                android:value=".activity.MachineListActivity" />
         </activity>
         <activity
-            android:name=".activity.ProfileListActivity"
+            android:name=".activity.MachineListActivity"
             android:label="@string/app_main_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -38,14 +39,14 @@
             android:label="@string/title_activity_settings">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.ProfileListActivity" />
+                android:value=".activity.MachineListActivity" />
         </activity>
         <activity
             android:name=".activity.AboutActivity"
             android:label="@string/title_activity_about">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.ProfileListActivity" />
+                android:value=".activity.MachineListActivity" />
         </activity>
 
 

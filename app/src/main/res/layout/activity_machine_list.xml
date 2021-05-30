@@ -9,7 +9,7 @@
     tools:openDrawer="start">
 
     <include
-        layout="@layout/app_bar_profile_list"
+        layout="@layout/app_bar_machine_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -19,7 +19,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_profile_list"
-        app:menu="@menu/activity_profile_list_drawer" />
+        app:headerLayout="@layout/nav_header_machine_list"
+        app:menu="@menu/activity_machine_list_drawer" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

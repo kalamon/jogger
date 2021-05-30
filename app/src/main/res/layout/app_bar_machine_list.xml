@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".activity.ProfileListActivity">
+    tools:context=".activity.MachineListActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -22,27 +22,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_profile_list" />
-
-    <!--<android.support.design.widget.FloatingActionButton-->
-    <!--android:id="@+id/fab"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="bottom|end"-->
-    <!--android:layout_margin="@dimen/fab_margin"-->
-    <!--app:backgroundTint="@color/spartez"-->
-    <!--app:srcCompat="@drawable/ic_add_white_24px" />-->
-
-    <!--<io.github.yavski.fabspeeddial.FabSpeedDial-->
-    <!--android:id="@+id/fab"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="bottom|end"-->
-    <!--app:fabGravity="bottom_end"-->
-    <!--app:fabMenu="@menu/menu_new_profile"-->
-    <!--app:miniFabBackgroundTint="@android:color/white"-->
-    <!--app:miniFabDrawableTint="?attr/colorPrimaryDark"-->
-    <!--app:miniFabTitleTextColor="?attr/colorPrimaryDark" />-->
+    <include layout="@layout/content_machine_list" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/action_add_duet_machine"
@@ -50,8 +30,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:backgroundTint="@color/trolololo"
         android:clickable="true"
+        app:tint="@color/white"
+        app:backgroundTint="@color/trolololo"
         app:srcCompat="@drawable/ic_add_white_24px" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

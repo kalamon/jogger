@@ -47,7 +47,6 @@ public class JsonOp extends AsyncTask<String, Integer, JsonOp.Result> {
             this.exception = exception;
         }
 
-
         public Object getResultString(Context context) {
             if (exception != null) {
                 return describeException(context, exception);
@@ -171,8 +170,10 @@ public class JsonOp extends AsyncTask<String, Integer, JsonOp.Result> {
             connection.setReadTimeout(1000 * getIntParam("preference_read_timeout", 3));
             connection.setRequestMethod(method);
             connection.setDoInput(true);
-            String auth = "Basic " + new String(Base64.encode((user + ":" + password).getBytes(), Base64.NO_WRAP));
-            connection.setRequestProperty("Authorization", auth);
+            if (user != null && password != null) {
+                String auth = "Basic " + new String(Base64.encode((user + ":" + password).getBytes(), Base64.NO_WRAP));
+                connection.setRequestProperty("Authorization", auth);
+            }
             if (sendData) {
                 connection.setRequestProperty("Content-Type", "application/json");
                 connection.setUseCaches(false);

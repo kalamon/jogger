@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.spartez.assettracker.checkin.ProfileListActivity_Old">
     <item
-        android:id="@+id/action_save_profile"
+        android:id="@+id/action_save_machine"
         android:orderInCategory="100"
-        android:title="@string/action_save_profile"
+        android:title="@string/action_save_machine"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_test_connection"

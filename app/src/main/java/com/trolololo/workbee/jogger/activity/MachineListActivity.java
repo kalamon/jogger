@@ -21,48 +21,31 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.trolololo.workbee.jogger.R;
-import com.trolololo.workbee.jogger.adapter.ProfileAdapter;
-import com.trolololo.workbee.jogger.domain.Profile;
+import com.trolololo.workbee.jogger.adapter.MachineAdapter;
+import com.trolololo.workbee.jogger.domain.Machine;
 
 import java.util.List;
 
 import static android.text.Html.FROM_HTML_MODE_COMPACT;
 
-public class ProfileListActivity
+public class MachineListActivity
         extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private Profile selectedProfile = null;
+    private Machine selectedMachine = null;
     private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_list);
+        setContentView(R.layout.activity_machine_list);
         setTitle(R.string.title_activity_profile_list);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        final FloatingActionsMenu addProfileMenu = findViewById(R.id.action_add_profile_menu);
-
-//        final View menuBackground = findViewById(R.id.add_profile_menu_background);
-//        menuBackground.setVisibility(View.GONE);
-//        menuBackground.setOnClickListener(v -> addProfileMenu.collapse());
-//        addProfileMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
-//            @Override
-//            public void onMenuExpanded() {
-//                menuBackground.setVisibility(View.VISIBLE);
-//            }
-
-//            @Override
-//            public void onMenuCollapsed() {
-//                menuBackground.setVisibility(View.GONE);
-//            }
-//        });
-        final FloatingActionButton addStoredOperationProfile = findViewById(R.id.action_add_duet_machine);
-        addStoredOperationProfile.setOnClickListener(v -> {
-//            addProfileMenu.collapse();
-            addNewProfile(false);
+        final FloatingActionButton addMachine = findViewById(R.id.action_add_duet_machine);
+        addMachine.setOnClickListener(v -> {
+            addNewMachine();
         });
 
         DrawerLayout drawer = findViewById(R.id.main_layout);
@@ -84,18 +67,18 @@ public class ProfileListActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        ((TextView) findViewById(R.id.add_profile_text)).setText(Html.fromHtml(getString(R.string.add_profile_description), FROM_HTML_MODE_COMPACT));
+        ((TextView) findViewById(R.id.add_profile_text)).setText(Html.fromHtml(getString(R.string.add_machine_description), FROM_HTML_MODE_COMPACT));
 
-        Profile lastOpenProfile = setupListView();
-        if (lastOpenProfile != null) {
-            openProfile(lastOpenProfile);
+        Machine lastOpenMachine = setupListView();
+        if (lastOpenMachine != null) {
+            openProfile(lastOpenMachine);
         }
     }
 
-    private Profile setupListView() {
-        ListView listView = findViewById(R.id.profileList);
-        List<Profile> profiles = Profile.loadAll(getApplicationContext());
-        final ProfileAdapter adapter = new ProfileAdapter(this, profiles);
+    private Machine setupListView() {
+        ListView listView = findViewById(R.id.machineList);
+        List<Machine> machines = Machine.loadAll(getApplicationContext());
+        final MachineAdapter adapter = new MachineAdapter(this, machines);
         listView.setAdapter(adapter);
         listView.setLongClickable(true);
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
@@ -103,13 +86,13 @@ public class ProfileListActivity
             return true;
         });
         listView.setOnItemClickListener((parent, view, position, id) -> onProfileClick(adapter, position));
-        showOrHideProfileList(listView, profiles);
+        showOrHideProfileList(listView, machines);
 
-        return Profile.getLastOpenProfile(this, profiles);
+        return Machine.getLastOpenProfile(this, machines);
     }
 
-    private void showOrHideProfileList(ListView listView, List<Profile> profiles) {
-        if (profiles.size() > 0) {
+    private void showOrHideProfileList(ListView listView, List<Machine> machines) {
+        if (machines.size() > 0) {
             listView.setVisibility(View.VISIBLE);
             findViewById(R.id.add_profile_text).setVisibility(View.GONE);
             findViewById(R.id.long_press_for_ops).setVisibility(View.VISIBLE);
@@ -122,11 +105,11 @@ public class ProfileListActivity
 
     @Override
     public void onRestart() {
-        selectedProfile = null;
-        Profile lastOpenProfile = setupListView();
+        selectedMachine = null;
+        Machine lastOpenMachine = setupListView();
         setMenuVisibility();
-        if (lastOpenProfile != null) {
-            openProfile(lastOpenProfile);
+        if (lastOpenMachine != null) {
+            openProfile(lastOpenMachine);
         }
         super.onRestart();
     }
@@ -144,7 +127,7 @@ public class ProfileListActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
-        getMenuInflater().inflate(R.menu.menu_profile_list, menu);
+        getMenuInflater().inflate(R.menu.menu_machine_list, menu);
         setMenuVisibility();
 
         return true;
@@ -153,8 +136,8 @@ public class ProfileListActivity
     private void setMenuVisibility() {
         MenuItem item1 = menu.findItem(R.id.action_edit);
         MenuItem item2 = menu.findItem(R.id.action_delete);
-        item1.setVisible(selectedProfile != null);
-        item2.setVisible(selectedProfile != null);
+        item1.setVisible(selectedMachine != null);
+        item2.setVisible(selectedMachine != null);
     }
 
     @Override
@@ -162,7 +145,7 @@ public class ProfileListActivity
         int id = item.getItemId();
 
         if (id == R.id.action_edit) {
-            openProfileEditor(selectedProfile);
+            openProfileEditor(selectedMachine);
             return true;
         } else if (id == R.id.action_delete) {
             DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
@@ -189,16 +172,15 @@ public class ProfileListActivity
         return super.onOptionsItemSelected(item);
     }
 
-
     private void deleteSelectedProfile() {
-        List<Profile> profiles = Profile.remove(getApplicationContext(), selectedProfile);
-        selectedProfile = null;
-        ListView listView = findViewById(R.id.profileList);
-        ProfileAdapter adapter = (ProfileAdapter) listView.getAdapter();
-        adapter.setProfiles(profiles);
+        List<Machine> machines = Machine.remove(getApplicationContext(), selectedMachine);
+        selectedMachine = null;
+        ListView listView = findViewById(R.id.machineList);
+        MachineAdapter adapter = (MachineAdapter) listView.getAdapter();
+        adapter.setMachines(machines);
         adapter.notifyDataSetChanged();
-        Profile.setLastOpenProfile(this, null);
-        showOrHideProfileList(listView, profiles);
+        Machine.setLastOpenProfile(this, null);
+        showOrHideProfileList(listView, machines);
     }
 
     @Override
@@ -221,49 +203,48 @@ public class ProfileListActivity
         return true;
     }
 
-    private void addNewProfile(boolean legacyDateFieldProfile) {
-        Intent intent = new Intent(this, ProfileActivity.class);
-        intent.putExtra(Profile.class.getCanonicalName() + ".legacy", legacyDateFieldProfile);
+    private void addNewMachine() {
+        Intent intent = new Intent(this, MachineActivity.class);
         startActivity(intent);
     }
 
-    private void onProfileLongClick(ProfileAdapter adapter, int position) {
+    private void onProfileLongClick(MachineAdapter adapter, int position) {
         if (position < 0) {
-            if (selectedProfile != null) {
-                selectedProfile.setSelected(false);
-                selectedProfile = null;
+            if (selectedMachine != null) {
+                selectedMachine.setSelected(false);
+                selectedMachine = null;
             }
         } else {
-            Profile profile = (Profile) adapter.getItem(position);
-            if (selectedProfile != null && profile == selectedProfile) {
-                selectedProfile.setSelected(false);
-                selectedProfile = null;
+            Machine machine = (Machine) adapter.getItem(position);
+            if (selectedMachine != null && machine == selectedMachine) {
+                selectedMachine.setSelected(false);
+                selectedMachine = null;
             } else {
-                if (selectedProfile != null) {
-                    selectedProfile.setSelected(false);
+                if (selectedMachine != null) {
+                    selectedMachine.setSelected(false);
                 }
-                selectedProfile = profile;
-                selectedProfile.setSelected(true);
+                selectedMachine = machine;
+                selectedMachine.setSelected(true);
             }
         }
         invalidateOptionsMenu();
         adapter.notifyDataSetChanged();
     }
 
-    private void onProfileClick(ProfileAdapter adapter, int position) {
-        Profile profile = (Profile) adapter.getItem(position);
-        openProfile(profile);
+    private void onProfileClick(MachineAdapter adapter, int position) {
+        Machine machine = (Machine) adapter.getItem(position);
+        openProfile(machine);
     }
 
-    private void openProfile(Profile profile) {
+    private void openProfile(Machine machine) {
         Intent intent = new Intent(this, JogActivity.class);
-        intent.putExtra(Profile.class.getCanonicalName(), profile);
+        intent.putExtra(Machine.class.getCanonicalName(), machine);
         startActivity(intent);
     }
 
-    private void openProfileEditor(Profile profile) {
-        Intent intent = new Intent(this, ProfileActivity.class);
-        intent.putExtra(Profile.class.getCanonicalName(), profile);
+    private void openProfileEditor(Machine machine) {
+        Intent intent = new Intent(this, MachineActivity.class);
+        intent.putExtra(Machine.class.getCanonicalName(), machine);
         startActivity(intent);
     }
 }

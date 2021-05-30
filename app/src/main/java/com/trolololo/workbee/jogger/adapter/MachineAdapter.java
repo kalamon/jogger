@@ -9,29 +9,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.trolololo.workbee.jogger.R;
-import com.trolololo.workbee.jogger.domain.Profile;
+import com.trolololo.workbee.jogger.domain.Machine;
 
 import java.util.List;
 
-public class ProfileAdapter extends BaseAdapter {
-    private Context context;
-    private List<Profile> profiles;
+public class MachineAdapter extends BaseAdapter {
+    private List<Machine> machines;
     private LayoutInflater inflater = null;
 
-    public ProfileAdapter(Context context, List<Profile> profiles) {
-        this.context = context;
-        this.profiles = profiles;
+    public MachineAdapter(Context context, List<Machine> machines) {
+        this.machines = machines;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return profiles.size();
+        return machines.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return profiles.get(position);
+        return machines.get(position);
     }
 
     @Override
@@ -39,8 +37,8 @@ public class ProfileAdapter extends BaseAdapter {
         return position;
     }
 
-    public void setProfiles(List<Profile> profiles) {
-        this.profiles = profiles;
+    public void setMachines(List<Machine> machines) {
+        this.machines = machines;
     }
 
     private static class ViewHolder {
@@ -50,14 +48,14 @@ public class ProfileAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Profile p = (Profile) getItem(position);
+        Machine p = (Machine) getItem(position);
         ViewHolder holder;
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.profile_list_entry, parent, false);
+            convertView = inflater.inflate(R.layout.machine_list_entry, parent, false);
             holder = new ViewHolder();
 
-            holder.urlView = convertView.findViewById(R.id.profile_list_entry_url);
-            holder.image = convertView.findViewById(R.id.profile_type_icon);
+            holder.urlView = convertView.findViewById(R.id.machine_list_entry_url);
+            holder.image = convertView.findViewById(R.id.machine_type_icon);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();

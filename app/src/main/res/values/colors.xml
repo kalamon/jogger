@@ -7,4 +7,6 @@
     <color name="trolololo">#77ADCC</color>
     <color name="trolololoDark">#3C6780</color>
     <color name="white">#FFFFFF</color>
+    <color name="offline">#F44336</color>
+    <color name="online">#4CAF50</color>
 </resources>
