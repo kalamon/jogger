@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.trolololo.workbee.jogger.R;
+import com.trolololo.workbee.jogger.Utils;
 
 import static android.view.MotionEvent.ACTION_MOVE;
 import static android.view.MotionEvent.ACTION_POINTER_DOWN;
@@ -47,35 +48,35 @@ public class Jogger extends View {
     public void setButtons(Activity parent, Buttons buttons) {
         this.buttons = buttons;
         buttons.onZ(foo -> {
-            setBackgroundTint(parent, parent.findViewById(R.id.button_x_y), R.color.trolololo);
-            setBackgroundTint(parent, parent.findViewById(R.id.button_z), R.color.colorAccent);
+            Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_x_y), R.color.trolololo);
+            Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_z), R.color.colorAccent);
             setBackground(R.drawable.ic_jogz);
             setSteps(parent, true);
             return null;
         });
         buttons.onXY(foo -> {
-            setBackgroundTint(parent, parent.findViewById(R.id.button_x_y), R.color.colorAccent);
-            setBackgroundTint(parent, parent.findViewById(R.id.button_z), R.color.trolololo);
+            Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_x_y), R.color.colorAccent);
+            Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_z), R.color.trolololo);
             setBackground(R.drawable.ic_jog);
             setSteps(parent, false);
             return null;
         });
         buttons.onBig(foo -> {
-            setBackgroundTint(parent, parent.findViewById(R.id.button_step_big), R.color.colorAccent);
-            setBackgroundTint(parent, parent.findViewById(R.id.button_step_medium), R.color.trolololo);
-            setBackgroundTint(parent, parent.findViewById(R.id.button_step_small), R.color.trolololo);
+            Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_step_big), R.color.colorAccent);
+            Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_step_medium), R.color.trolololo);
+            Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_step_small), R.color.trolololo);
             return null;
         });
         buttons.onMedium(foo -> {
-            setBackgroundTint(parent, parent.findViewById(R.id.button_step_big), R.color.trolololo);
-            setBackgroundTint(parent, parent.findViewById(R.id.button_step_medium), R.color.colorAccent);
-            setBackgroundTint(parent, parent.findViewById(R.id.button_step_small), R.color.trolololo);
+            Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_step_big), R.color.trolololo);
+            Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_step_medium), R.color.colorAccent);
+            Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_step_small), R.color.trolololo);
             return null;
         });
         buttons.onSmall(foo -> {
-            setBackgroundTint(parent, parent.findViewById(R.id.button_step_big), R.color.trolololo);
-            setBackgroundTint(parent, parent.findViewById(R.id.button_step_medium), R.color.trolololo);
-            setBackgroundTint(parent, parent.findViewById(R.id.button_step_small), R.color.colorAccent);
+            Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_step_big), R.color.trolololo);
+            Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_step_medium), R.color.trolololo);
+            Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_step_small), R.color.colorAccent);
             return null;
         });
         buttons.onSet(event -> {
@@ -83,10 +84,10 @@ public class Jogger extends View {
             int toolType = event.getToolType(0);
             if (toolType == TOOL_TYPE_FINGER) {
                 if (action == MotionEvent.ACTION_DOWN || action == ACTION_POINTER_DOWN) {
-                    setBackgroundTint(parent, parent.findViewById(R.id.button_set), R.color.colorAccent);
+                    Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_set), R.color.colorAccent);
                     Log.i(TAG, "WORK ZERO SET");
                 } else if (action == ACTION_UP || action == ACTION_POINTER_UP) {
-                    setBackgroundTint(parent, parent.findViewById(R.id.button_set), R.color.trolololo);
+                    Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_set), R.color.trolololo);
                 }
             }
 
@@ -187,9 +188,5 @@ public class Jogger extends View {
 
     private void setBackground(int id) {
         setForeground(ResourcesCompat.getDrawable(getResources(), id, null));
-    }
-
-    private void setBackgroundTint(Context context, View view, int color) {
-        view.setBackgroundTintList(ContextCompat.getColorStateList(context, color));
     }
 }

@@ -2,8 +2,10 @@ package com.trolololo.workbee.jogger.activity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,19 +21,25 @@ import com.trolololo.workbee.jogger.network.BaseNetworkCallback;
 import com.trolololo.workbee.jogger.network.JsonOp;
 import com.trolololo.workbee.jogger.network.NetworkCall;
 import com.trolololo.workbee.jogger.network.NetworkFragment;
+import com.trolololo.workbee.jogger.operations.AbstractOperation;
+import com.trolololo.workbee.jogger.operations.HomeOperation;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
 
 public class JogActivity extends AppCompatActivity {
     private static final String TAG = JogActivity.class.getName();
 
     private Machine machine;
 
+    private Menu menu;
+
     private NetworkFragment onlineStatusNetworkFragment;
     private NetworkFragment networkFragment;
 
     private Timer timer;
+    private boolean isOnline = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,12 +73,15 @@ public class JogActivity extends AppCompatActivity {
         networkFragment.attach(this);
 
         timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                testOnline();
-            }
-        }, 1000, 10000);
+        testOnline();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
+        getMenuInflater().inflate(R.menu.menu_jog, menu);
+        setMenuVisibility();
+        return true;
     }
 
     @Override
@@ -82,29 +93,91 @@ public class JogActivity extends AppCompatActivity {
             cancelAll();
             finish();
             return true;
+        } else if (id == R.id.action_home) {
+            Log.i(TAG, "HOMING!");
+            if (AbstractOperation.isInProgress()) {
+                return true;
+            }
+
+            HomeOperation op = new HomeOperation(this, networkFragment, machine);
+            op.run(new AbstractOperation.OperationCallback() {
+                @Override
+                public void result(JsonElement result) {
+                    setMenuVisibility();
+                }
+
+                @Override
+                public void error(String error) {
+                    Toast.makeText(JogActivity.this, error, Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void waitForPrevious() {
+                    Log.w(TAG, "operation in progress, not homing again");
+                }
+            });
+            setMenuVisibility();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i(TAG, "Stopping, cancelling online ping timer");
+        cancelAll();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.i(TAG, "Restarting, rescheduling online ping timer");
+        timer = new Timer();
+        testOnline();
+    }
+
+    private void setMenuVisibility() {
+        MenuItem menuItem = menu.findItem(R.id.action_home);
+        menuItem.setVisible(isOnline);
+        menuItem.setEnabled(!AbstractOperation.isInProgress());
+    }
+
+    private void scheduleOnlinePing() {
+        if (timer == null) {
+            return;
+        }
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                testOnline();
+            }
+        }, 3000);
+    }
+
     private void cancelAll() {
         onlineStatusNetworkFragment.cancel();
         networkFragment.cancel();
-        timer.cancel();
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
     }
 
     private final NetworkCall isOnlineNetworkCall = new NetworkCall() {
         public String getUrl() { return "/rr_status?type=1"; }
         public String describe() { return getString(R.string.rr_status); }
         public String fromResult(JsonElement result) {
-            JsonArray a = result.getAsJsonArray();
-            return String.format(getString(R.string.rr_status_result), a.size());
+            return null;
         }
     };
 
     private void testOnline() {
-        onlineStatusNetworkFragment.cancel();
-        onlineStatusNetworkFragment.get(machine.getUrl() + isOnlineNetworkCall.getUrl(), null, null,
+        Executors.newSingleThreadExecutor().submit(() -> {
+            onlineStatusNetworkFragment.cancel();
+            onlineStatusNetworkFragment.get(machine.getUrl() + isOnlineNetworkCall.getUrl(),
+                null, null,
                 new BaseNetworkCallback(JogActivity.this) {
                     @Override
                     public void finished() {
@@ -115,16 +188,24 @@ public class JogActivity extends AppCompatActivity {
                     public void update(JsonOp.Result result) {
                         if (result != null) {
                             Object resultString = result.getResultString(JogActivity.this);
-                            Log.i(TAG, "Received testOnline() result: " + resultString);
-                            OnlineLabel label = findViewById(R.id.online_label);
-                            boolean online = result.exception == null && result.json != null;
-                            String text = online ? getHomeAndCoords(result.json) : getString(R.string.offline);
-                            label.setOnline(online, text);
-                            findViewById(R.id.cover_glass).setVisibility(online ? View.GONE : View.VISIBLE);
+                            if (result.exception != null && resultString.equals("unexpected end of stream")) {
+                                Log.d(TAG, resultString + ", oh well, skipping");
+                            } else {
+                                Log.d(TAG, "Received testOnline() result: " + resultString);
+                                OnlineLabel label = findViewById(R.id.online_label);
+                                isOnline = result.exception == null && result.json != null;
+                                String text = isOnline ? getHomeAndCoords(result.json) : getString(R.string.offline);
+                                label.setOnline(isOnline, text);
+                                setMenuVisibility();
+                                findViewById(R.id.cover_glass).setVisibility(isOnline ? View.GONE : View.VISIBLE);
+                            }
                         }
+
+                        scheduleOnlinePing();
                     }
                 }
-        );
+            );
+        });
     }
 
     private String getHomeAndCoords(JsonElement json) {
@@ -135,7 +216,7 @@ public class JogActivity extends AppCompatActivity {
             boolean xHomed = axesHomed.get(0).getAsInt() > 0;
             boolean yHomed = axesHomed.get(1).getAsInt() > 0;
             boolean zHomed = axesHomed.get(2).getAsInt() > 0;
-            JsonArray xyz = coords.get("xyz").getAsJsonArray();
+            JsonArray xyz = coords.get("machine").getAsJsonArray();
             float x = xyz.get(0).getAsFloat();
             float y = xyz.get(1).getAsFloat();
             float z = xyz.get(2).getAsFloat();

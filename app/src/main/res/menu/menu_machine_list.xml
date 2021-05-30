@@ -1,7 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.spartez.assettracker.checkin.ProfileListActivity_Old">
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+
     <item
         android:id="@+id/action_edit"
         android:title="@string/action_edit"

@@ -11,6 +11,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.trolololo.workbee.jogger.R;
+import com.trolololo.workbee.jogger.Utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -49,19 +50,12 @@ public class JsonOp extends AsyncTask<String, Integer, JsonOp.Result> {
 
         public Object getResultString(Context context) {
             if (exception != null) {
-                return describeException(context, exception);
+                return Utils.describeException(context, exception);
             }
             if (json != null) {
                 return json;
             }
             return string;
-        }
-
-        private String describeException(Context context, Exception exception) {
-            if (exception instanceof HttpErrorException) {
-                return String.format(context.getString(R.string.http_exception), ((HttpErrorException) exception).getErrorCode(), exception.getMessage());
-            }
-            return exception.getMessage();
         }
 
     }
