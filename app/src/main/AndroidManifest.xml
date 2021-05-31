@@ -49,7 +49,6 @@
                 android:value=".activity.MachineListActivity" />
         </activity>
 
-
     </application>
 
 </manifest>
