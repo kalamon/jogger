@@ -3,6 +3,7 @@ package com.trolololo.workbee.jogger.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -196,6 +197,11 @@ public class MachineListActivity
             Intent intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
             return true;
+        } else if (id == R.id.nav_feedback) {
+            String url = "https://github.com/kalamon/jogger/issues";
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(url));
+            startActivity(intent);
         }
 
         DrawerLayout drawer = findViewById(R.id.main_layout);
