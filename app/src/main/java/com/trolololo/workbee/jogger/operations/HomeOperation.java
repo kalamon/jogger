@@ -20,15 +20,12 @@ public class HomeOperation extends AbstractOperation {
         // yes, it is a GET. How lame!
         networkFragment.get(machine.getUrl() + "/rr_gcode?gcode=G28",
             null, null,
-            new BaseNetworkCallback(context) {
+            new OperationNetworkCallback(context, networkFragment) {
                 @Override
-                public void finished() {
+                protected void updateInternal() {
+                    callback.result(getResult());
                 }
-
-                @Override
-                public void update(JsonOp.Result result) {
-                    callback.result(result);
-                }
-            });
+            }
+        );
     }
 }
