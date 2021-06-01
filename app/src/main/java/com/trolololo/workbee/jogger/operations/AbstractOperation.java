@@ -2,23 +2,25 @@ package com.trolololo.workbee.jogger.operations;
 
 import android.content.Context;
 
-import com.google.gson.JsonElement;
 import com.trolololo.workbee.jogger.Utils;
 import com.trolololo.workbee.jogger.domain.Machine;
 import com.trolololo.workbee.jogger.network.JsonOp;
 import com.trolololo.workbee.jogger.network.NetworkFragment;
 
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 public abstract class AbstractOperation {
     private static boolean inProgress;
+
+    protected static final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
     protected final Context context;
     protected final NetworkFragment networkFragment;
     protected final Machine machine;
 
     public interface OperationCallback {
-        void result(JsonElement result);
+        void result(Object result);
         void error(String error);
         void waitForPrevious();
     }
@@ -51,11 +53,12 @@ public abstract class AbstractOperation {
                 if (result.exception != null) {
                     callback.error(Utils.describeException(context, result.exception));
                 } else {
-                    callback.result(result.json);
+                    interpretResponse(result, callback);
                 }
             });
         });
     }
 
     protected abstract void runInternal(OperationCallbackInternal callback);
+    protected abstract void interpretResponse(JsonOp.Result result, OperationCallback callback);
 }

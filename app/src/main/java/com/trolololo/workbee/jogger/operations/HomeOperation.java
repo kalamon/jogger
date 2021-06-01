@@ -1,14 +1,11 @@
 package com.trolololo.workbee.jogger.operations;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.trolololo.workbee.jogger.domain.Machine;
-import com.trolololo.workbee.jogger.network.BaseNetworkCallback;
-import com.trolololo.workbee.jogger.network.JsonOp;
 import com.trolololo.workbee.jogger.network.NetworkFragment;
 
-public class HomeOperation extends AbstractOperation {
+public class HomeOperation extends AbstractGCodeOperationWithResult {
     private static final String TAG = HomeOperation.class.getName();
 
     public HomeOperation(Context context, NetworkFragment networkFragment, Machine machine) {
@@ -16,16 +13,7 @@ public class HomeOperation extends AbstractOperation {
     }
 
     @Override
-    protected void runInternal(OperationCallbackInternal callback) {
-        // yes, it is a GET. How lame!
-        networkFragment.get(machine.getUrl() + "/rr_gcode?gcode=G28",
-            null, null,
-            new OperationNetworkCallback(context, networkFragment) {
-                @Override
-                protected void updateInternal() {
-                    callback.result(getResult());
-                }
-            }
-        );
+    protected String getGcode() {
+        return "G28";
     }
 }

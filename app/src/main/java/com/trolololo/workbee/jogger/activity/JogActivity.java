@@ -16,6 +16,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.trolololo.workbee.jogger.R;
+import com.trolololo.workbee.jogger.Utils;
 import com.trolololo.workbee.jogger.domain.Machine;
 import com.trolololo.workbee.jogger.network.BaseNetworkCallback;
 import com.trolololo.workbee.jogger.network.JsonOp;
@@ -26,10 +27,12 @@ import com.trolololo.workbee.jogger.operations.HomeOperation;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class JogActivity extends AppCompatActivity {
     private static final String TAG = JogActivity.class.getName();
+    public static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
 
     private Machine machine;
 
@@ -102,7 +105,7 @@ public class JogActivity extends AppCompatActivity {
             HomeOperation op = new HomeOperation(this, networkFragment, machine);
             op.run(new AbstractOperation.OperationCallback() {
                 @Override
-                public void result(JsonElement result) {
+                public void result(Object result) {
                     setMenuVisibility();
                 }
 
@@ -153,7 +156,7 @@ public class JogActivity extends AppCompatActivity {
             public void run() {
                 testOnline();
             }
-        }, 3000);
+        }, 6000);
     }
 
     private void cancelAll() {
@@ -166,7 +169,7 @@ public class JogActivity extends AppCompatActivity {
     }
 
     private final NetworkCall isOnlineNetworkCall = new NetworkCall() {
-        public String getUrl() { return "/rr_status?type=1"; }
+        public String getUrl() { return "/rr_status?type=2"; }
         public String describe() { return getString(R.string.rr_status); }
         public String fromResult(JsonElement result) {
             return null;
@@ -174,7 +177,7 @@ public class JogActivity extends AppCompatActivity {
     };
 
     private void testOnline() {
-        Executors.newSingleThreadExecutor().submit(() -> {
+        EXECUTOR_SERVICE.submit(() -> {
             onlineStatusNetworkFragment.cancel();
             onlineStatusNetworkFragment.get(machine.getUrl() + isOnlineNetworkCall.getUrl(),
                 null, null,
@@ -187,11 +190,9 @@ public class JogActivity extends AppCompatActivity {
                     @Override
                     public void update(JsonOp.Result result) {
                         if (result != null) {
-                            Object resultString = result.getResultString(JogActivity.this);
-                            if (result.exception != null && resultString.equals("unexpected end of stream")) {
-                                Log.d(TAG, resultString + ", oh well, skipping");
+                            if (Utils.isUnexpectedEndOfStream(result, JogActivity.this)) {
+                                Log.d(TAG, "Encountered end of stream, oh well, skipping");
                             } else {
-                                Log.d(TAG, "Received testOnline() result: " + resultString);
                                 OnlineLabel label = findViewById(R.id.online_label);
                                 isOnline = result.exception == null && result.json != null;
                                 String text = isOnline ? getHomeAndCoords(result.json) : getString(R.string.offline);
@@ -221,7 +222,13 @@ public class JogActivity extends AppCompatActivity {
             float y = xyz.get(1).getAsFloat();
             float z = xyz.get(2).getAsFloat();
             boolean homed = xHomed && yHomed && zHomed;
-            return String.format(getString(R.string.home_and_coords), homed ? "Homed" : "Not homed", x, y, z);
+            float topSpeed = o.get("speeds").getAsJsonObject().get("top").getAsFloat();
+            return String.format(
+                getString(R.string.home_and_coords),
+                homed ? "Homed" : "Not homed",
+                topSpeed > 0 ? "working" : "idle",
+                x, y, z
+            );
         } catch (Exception e) {
             Log.w(TAG, e);
             return getString(R.string.error);

@@ -64,7 +64,7 @@
     <string name="online">Online</string>
     <string name="offline">Offline</string>
     <string name="error">Error</string>
-    <string name="home_and_coords">%1$s, X=%2$.2f, Y=%3$.2f, Z=%4$.2f</string>
+    <string name="home_and_coords">%1$s, %2$s, X=%3$.2f, Y=%4$.2f, Z=%5$.2f</string>
     <string name="home">Home</string>
     <string name="feedback">Feedback</string>
 </resources>

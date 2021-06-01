@@ -6,6 +6,7 @@ import android.view.View;
 import androidx.core.content.ContextCompat;
 
 import com.trolololo.workbee.jogger.network.HttpErrorException;
+import com.trolololo.workbee.jogger.network.JsonOp;
 
 public class Utils {
     public static void setBackgroundTint(Context context, View view, int color) {
@@ -17,5 +18,13 @@ public class Utils {
             return String.format(context.getString(R.string.http_exception), ((HttpErrorException) exception).getErrorCode(), exception.getMessage());
         }
         return exception.getMessage();
+    }
+
+    public static boolean isUnexpectedEndOfStream(JsonOp.Result result, Context context) {
+        if (result.exception != null) {
+            Object resultString = result.getResultString(context);
+            return resultString.equals("unexpected end of stream");
+        }
+        return false;
     }
 }
