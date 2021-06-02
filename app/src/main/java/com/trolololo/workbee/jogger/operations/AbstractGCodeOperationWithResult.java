@@ -24,7 +24,9 @@ public abstract class AbstractGCodeOperationWithResult extends AbstractOperation
     @Override
     protected void runInternal(OperationCallbackInternal callback) {
         try {
-            networkFragment.get(machine.getUrl() + "/rr_gcode?gcode=" + URLEncoder.encode(getGcode(), "utf-8"),
+            String url = machine.getUrl() + "/rr_gcode?gcode=" + URLEncoder.encode(getGcode(), "utf-8").replace("+", "%20");
+            Log.d(TAG, "GET at " + url);
+            networkFragment.get(url,
             null, null,
             new OperationNetworkCallback(context, networkFragment) {
                 @Override
@@ -57,7 +59,9 @@ public abstract class AbstractGCodeOperationWithResult extends AbstractOperation
 
     private void waitForStop(OperationCallbackInternal callback) {
         executorService.schedule(() -> {
-            networkFragment.get(machine.getUrl() + "/rr_status?type=1",
+            String url = machine.getUrl() + "/rr_status?type=1";
+            Log.d(TAG, "GET at " + url);
+            networkFragment.get(url,
                 null, null,
                 new OperationNetworkCallback(context, networkFragment) {
                     @Override
@@ -92,7 +96,9 @@ public abstract class AbstractGCodeOperationWithResult extends AbstractOperation
 
     private void readResult(OperationCallbackInternal callback) {
         executorService.schedule(() -> {
-            networkFragment.get(machine.getUrl() + "/rr_reply",
+            String url = machine.getUrl() + "/rr_reply";
+            Log.d(TAG, "GET at " + url);
+            networkFragment.get(url,
                 null, null,
                 new OperationNetworkCallback(context, networkFragment) {
                     @Override
@@ -102,7 +108,7 @@ public abstract class AbstractGCodeOperationWithResult extends AbstractOperation
                             Log.d(TAG, "Encountered end of stream, repeating readResult()");
                             readResult(callback);
                         }
-                        callback.result(getResult());
+                        callback.result(result);
                     }
                 }
             );

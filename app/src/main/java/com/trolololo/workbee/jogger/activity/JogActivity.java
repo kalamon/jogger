@@ -24,6 +24,8 @@ import com.trolololo.workbee.jogger.network.NetworkCall;
 import com.trolololo.workbee.jogger.network.NetworkFragment;
 import com.trolololo.workbee.jogger.operations.AbstractOperation;
 import com.trolololo.workbee.jogger.operations.HomeOperation;
+import com.trolololo.workbee.jogger.operations.MoveOperation;
+import com.trolololo.workbee.jogger.operations.MoveParams;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -68,6 +70,8 @@ public class JogActivity extends AppCompatActivity {
                 .put(Buttons.STEP_SMALL, findViewById(R.id.button_step_small))
                 .build()
         ));
+        jogger.setClickCallback(this::runMove);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         onlineStatusNetworkFragment = new ViewModelProvider(this).get("online_status", NetworkFragment.class);
@@ -116,7 +120,7 @@ public class JogActivity extends AppCompatActivity {
 
                 @Override
                 public void waitForPrevious() {
-                    Log.w(TAG, "operation in progress, not homing again");
+                    Log.w(TAG, "homing operation in progress, not homing again");
                 }
             });
             setMenuVisibility();
@@ -142,9 +146,42 @@ public class JogActivity extends AppCompatActivity {
     }
 
     private void setMenuVisibility() {
-        MenuItem menuItem = menu.findItem(R.id.action_home);
-        menuItem.setVisible(isOnline);
-        menuItem.setEnabled(!AbstractOperation.isInProgress());
+        if (menu != null) {
+            MenuItem menuItem = menu.findItem(R.id.action_home);
+            menuItem.setVisible(isOnline);
+            menuItem.setEnabled(!AbstractOperation.isInProgress());
+        }
+    }
+
+
+    private void runMove(Jogger.State state) {
+        if (state == null) {
+            return;
+        }
+        MoveParams moveParams = new MoveOperation.MoveParamsBuilder()
+            .setAxis(state.axis)
+            .setDirection(state.direction)
+            .setAmount(state.stepSize)
+            .build();
+
+        MoveOperation moveOperation = new MoveOperation(this, networkFragment, machine, moveParams);
+        moveOperation.run(new AbstractOperation.OperationCallback() {
+            @Override
+            public void result(Object result) {
+                Jogger jogger = findViewById(R.id.jogger);
+                runMove(jogger.getState());
+            }
+
+            @Override
+            public void error(String error) {
+                Toast.makeText(JogActivity.this, error, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void waitForPrevious() {
+                Log.w(TAG, "move operation in progress, not moving again");
+            }
+        });
     }
 
     private void scheduleOnlinePing() {
@@ -212,22 +249,38 @@ public class JogActivity extends AppCompatActivity {
     private String getHomeAndCoords(JsonElement json) {
         try {
             JsonObject o = json.getAsJsonObject();
-            JsonObject coords = o.get("coords").getAsJsonObject();
-            JsonArray axesHomed = coords.get("axesHomed").getAsJsonArray();
+            JsonElement co = o.get("coords");
+            if (co == null) {
+                throw new IllegalArgumentException("'coords' property is expected");
+            }
+            JsonObject coords = co.getAsJsonObject();
+            JsonElement ah = coords.get("axesHomed");
+            if (ah == null) {
+                throw new IllegalArgumentException("'axesHomed' property is expected");
+            }
+            JsonArray axesHomed = ah.getAsJsonArray();
             boolean xHomed = axesHomed.get(0).getAsInt() > 0;
             boolean yHomed = axesHomed.get(1).getAsInt() > 0;
             boolean zHomed = axesHomed.get(2).getAsInt() > 0;
-            JsonArray xyz = coords.get("machine").getAsJsonArray();
+            JsonElement machine = coords.get("machine");
+            if (machine == null) {
+                throw new IllegalArgumentException("'machine' property is expected");
+            }
+            JsonArray xyz = machine.getAsJsonArray();
             float x = xyz.get(0).getAsFloat();
             float y = xyz.get(1).getAsFloat();
             float z = xyz.get(2).getAsFloat();
             boolean homed = xHomed && yHomed && zHomed;
-            float topSpeed = o.get("speeds").getAsJsonObject().get("top").getAsFloat();
+            JsonElement speeds = o.get("speeds");
+            if (speeds == null) {
+                throw new IllegalArgumentException("'speeds' property is expected");
+            }
+            float topSpeed = speeds.getAsJsonObject().get("top").getAsFloat();
             return String.format(
-                getString(R.string.home_and_coords),
-                homed ? "Homed" : "Not homed",
-                topSpeed > 0 ? "working" : "idle",
-                x, y, z
+                    getString(R.string.home_and_coords),
+                    homed ? "Homed" : "Not homed",
+                    topSpeed > 0 ? "working" : "idle",
+                    x, y, z
             );
         } catch (Exception e) {
             Log.w(TAG, e);

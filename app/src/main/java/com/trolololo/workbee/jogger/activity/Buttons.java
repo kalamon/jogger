@@ -161,6 +161,18 @@ public class Buttons {
         return isZ;
     }
 
+    public boolean isBig() {
+        return isBig;
+    }
+
+    public boolean isMedium() {
+        return isMedium;
+    }
+
+    public boolean isSmall() {
+        return isSmall;
+    }
+
     private void handleSize(boolean big, boolean medium, boolean small) {
         isBig = big;
         isMedium = medium;

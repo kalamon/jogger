@@ -8,11 +8,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.trolololo.workbee.jogger.R;
 import com.trolololo.workbee.jogger.Utils;
+import com.trolololo.workbee.jogger.operations.AbstractMoveOperation;
 
 import static android.view.MotionEvent.ACTION_MOVE;
 import static android.view.MotionEvent.ACTION_POINTER_DOWN;
@@ -24,6 +24,30 @@ public class Jogger extends View {
     private static final String TAG = Jogger.class.getName();
 
     private Buttons buttons;
+    private State state;
+    private String stepSize;
+    private TouchHandler touchHandler;
+
+    public class State {
+        public final AbstractMoveOperation.Axis axis;
+        public final AbstractMoveOperation.Direction direction;
+        public final String stepSize;
+
+        public State(AbstractMoveOperation.Axis axis, AbstractMoveOperation.Direction direction, String stepSize) {
+            this.axis = axis;
+            this.direction = direction;
+            this.stepSize = stepSize;
+        }
+
+        @Override
+        public String toString() {
+            return direction.toString() + axis + stepSize;
+        }
+    }
+
+    public interface TouchHandler {
+        void pushed(State state);
+    }
 
     public Jogger(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -51,32 +75,37 @@ public class Jogger extends View {
             Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_x_y), R.color.trolololo);
             Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_z), R.color.colorAccent);
             setBackground(R.drawable.ic_jogz);
-            setSteps(parent, true);
+            setStepButtonsTexts(parent, true);
+            setStepSize();
             return null;
         });
         buttons.onXY(foo -> {
             Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_x_y), R.color.colorAccent);
             Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_z), R.color.trolololo);
             setBackground(R.drawable.ic_jog);
-            setSteps(parent, false);
+            setStepButtonsTexts(parent, false);
+            setStepSize();
             return null;
         });
         buttons.onBig(foo -> {
             Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_step_big), R.color.colorAccent);
             Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_step_medium), R.color.trolololo);
             Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_step_small), R.color.trolololo);
+            setStepSize();
             return null;
         });
         buttons.onMedium(foo -> {
             Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_step_big), R.color.trolololo);
             Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_step_medium), R.color.colorAccent);
             Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_step_small), R.color.trolololo);
+            setStepSize();
             return null;
         });
         buttons.onSmall(foo -> {
             Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_step_big), R.color.trolololo);
             Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_step_medium), R.color.trolololo);
             Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_step_small), R.color.colorAccent);
+            setStepSize();
             return null;
         });
         buttons.onSet(event -> {
@@ -95,7 +124,28 @@ public class Jogger extends View {
         });
     }
 
-    private void setSteps(Activity parent, boolean isZ) {
+    private void setStepSize() {
+        String suffix = buttons.isZ() ? Buttons.Z : "";
+        if (buttons.isBig()) {
+            stepSize = Buttons.STEP_SIZES.get(Buttons.STEP_BIG + suffix);
+        } else if (buttons.isMedium()) {
+            stepSize = Buttons.STEP_SIZES.get(Buttons.STEP_MEDIUM + suffix);
+        } else if (buttons.isSmall()) {
+            stepSize = Buttons.STEP_SIZES.get(Buttons.STEP_SMALL + suffix);
+        } else {
+            stepSize = "0";
+        }
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setClickCallback(TouchHandler clickCallback) {
+        this.touchHandler = clickCallback;
+    }
+
+    private void setStepButtonsTexts(Activity parent, boolean isZ) {
         String suffix = isZ ? Buttons.Z : "";
         String big = Buttons.STEP_SIZES.get(Buttons.STEP_BIG + suffix);
         String medium = Buttons.STEP_SIZES.get(Buttons.STEP_MEDIUM + suffix);
@@ -106,23 +156,29 @@ public class Jogger extends View {
     }
 
     private void handleMove(float x, float y) {
-        Log.i(TAG, "move: " + x + ", " + y + ", " + calc(x, y, true));
+        state = calc(x, y);
+        Log.i(TAG, "move: " + x + ", " + y + ", " + state);
     }
 
     private void handleUp(float x, float y) {
-        Log.i(TAG, "up: " + x + ", " + y + ", " + calc(x, y, false));
         setBackground(buttons.isZ() ? R.drawable.ic_jogz : R.drawable.ic_jog);
+        Log.i(TAG, "up: " + x + ", " + y);
+        state = null;
     }
 
     private void handleDown(float x, float y) {
-        Log.i(TAG, "down: " + x + ", " + y + ", " + calc(x, y, true));
+        state = calc(x, y);
+        Log.i(TAG, "down: " + x + ", " + y + ", " + state);
+        if (state != null && touchHandler != null) {
+            touchHandler.pushed(state);
+        }
     }
 
     private static final float ANGLE = 0.785398f; // 45 deg
     double COS = Math.cos(ANGLE);
     double SIN = Math.sin(ANGLE);
 
-    private String calc(float x, float y, boolean setBackground) {
+    private State calc(float x, float y) {
         float w = getWidth();
         float h = getHeight();
         float xzero = w / 2;
@@ -135,55 +191,57 @@ public class Jogger extends View {
         double newX = x1 * COS - y1 * SIN;
         double newY = x1 * SIN + y1 * COS;
 
-        String dir = "";
-        if (setBackground) {
-            if (buttons.isZ()) {
-                if (newX < 0) {
-                    if (newX < -0.2 && newY > 0.2) {
-                        dir = "MINUS-Z";
-                        setBackground(R.drawable.ic_jogzdown);
-                    } else {
-                        setBackground(R.drawable.ic_jogz);
-                    }
+        AbstractMoveOperation.Axis axis = null;
+        AbstractMoveOperation.Direction direction = null;
+
+        if (buttons.isZ()) {
+            axis = AbstractMoveOperation.Axis.Z;
+            if (newX < 0) {
+                if (newX < -0.2 && newY > 0.2) {
+                    direction = AbstractMoveOperation.Direction.MINUS;
+                    setBackground(R.drawable.ic_jogzdown);
                 } else {
-                    if (newX > 0.2 && newY < -0.2) {
-                        dir = "PLUS-Z";
-                        setBackground(R.drawable.ic_jogzup);
-                    } else {
-                        setBackground(R.drawable.ic_jogz);
-                    }
+                    setBackground(R.drawable.ic_jogz);
                 }
             } else {
-                if (newX < 0) {
-                    if (newX < -0.2 && Math.abs(newY) > 0.2) {
-                        dir = "MINUS";
-                        if (newY > 0) {
-                            dir += "-Y";
-                            setBackground(R.drawable.ic_jogdown);
-                        } else {
-                            dir += "-X";
-                            setBackground(R.drawable.ic_jogleft);
-                        }
+                if (newX > 0.2 && newY < -0.2) {
+                    direction = AbstractMoveOperation.Direction.PLUS;
+                    setBackground(R.drawable.ic_jogzup);
+                } else {
+                    setBackground(R.drawable.ic_jogz);
+                }
+            }
+        } else {
+            if (newX < 0) {
+                if (newX < -0.2 && Math.abs(newY) > 0.2) {
+                    direction = AbstractMoveOperation.Direction.MINUS;
+                    if (newY > 0) {
+                        axis = AbstractMoveOperation.Axis.Y;
+                        setBackground(R.drawable.ic_jogdown);
                     } else {
-                        setBackground(R.drawable.ic_jog);
+                        axis = AbstractMoveOperation.Axis.X;
+                        setBackground(R.drawable.ic_jogleft);
                     }
                 } else {
-                    if (newX > 0.2 && Math.abs(newY) > 0.2) {
-                        dir = "PLUS";
-                        if (newY > 0) {
-                            dir += "-X";
-                            setBackground(R.drawable.ic_jogright);
-                        } else {
-                            dir += "-Y";
-                            setBackground(R.drawable.ic_jogup);
-                        }
+                    setBackground(R.drawable.ic_jog);
+                }
+            } else {
+                if (newX > 0.2 && Math.abs(newY) > 0.2) {
+                    direction = AbstractMoveOperation.Direction.PLUS;
+                    if (newY > 0) {
+                        axis = AbstractMoveOperation.Axis.X;
+                        setBackground(R.drawable.ic_jogright);
                     } else {
-                        setBackground(R.drawable.ic_jog);
+                        axis = AbstractMoveOperation.Axis.Y;
+                        setBackground(R.drawable.ic_jogup);
                     }
+                } else {
+                    setBackground(R.drawable.ic_jog);
                 }
             }
         }
-        return "rel: x=" + x1 + ", y=" + y1 + "rot: x=" + newX + ", y=" + newY + ", " + dir;
+
+        return direction != null ? new State(axis, direction, stepSize) : null;
     }
 
     private void setBackground(int id) {

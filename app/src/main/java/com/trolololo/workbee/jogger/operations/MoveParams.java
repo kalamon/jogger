@@ -1,6 +1,6 @@
 package com.trolololo.workbee.jogger.operations;
 
-class MoveParams {
+public class MoveParams {
     private final AbstractMoveOperation.Axis axis;
     private final AbstractMoveOperation.Direction direction;
     private final String amount;

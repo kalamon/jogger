@@ -5,12 +5,12 @@ import android.content.SharedPreferences;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Base64;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
-import com.trolololo.workbee.jogger.R;
 import com.trolololo.workbee.jogger.Utils;
 
 import java.io.BufferedReader;
@@ -22,6 +22,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class JsonOp extends AsyncTask<String, Integer, JsonOp.Result> {
+    private static final String TAG = JsonOp.class.getName();
     private final String url;
     private final String user;
     private final String password;
@@ -190,7 +191,9 @@ public class JsonOp extends AsyncTask<String, Integer, JsonOp.Result> {
             if (inputStream != null) {
                 result = readStream(inputStream);
                 try {
-                    json = new JsonParser().parse(result);
+                    if (result.trim().length() > 0) {
+                        json = new JsonParser().parse(result);
+                    }
                 } catch (JsonSyntaxException e) {
                     // oh well
                 }
@@ -206,6 +209,7 @@ public class JsonOp extends AsyncTask<String, Integer, JsonOp.Result> {
                 connection.disconnect();
             }
         }
+//        Log.d(TAG, "received \"" + result + "\"");
         return json != null ? json : result;
     }
 
