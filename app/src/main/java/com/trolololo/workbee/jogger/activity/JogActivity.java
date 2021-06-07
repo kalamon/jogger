@@ -22,10 +22,13 @@ import com.trolololo.workbee.jogger.network.BaseNetworkCallback;
 import com.trolololo.workbee.jogger.network.JsonOp;
 import com.trolololo.workbee.jogger.network.NetworkCall;
 import com.trolololo.workbee.jogger.network.NetworkFragment;
+import com.trolololo.workbee.jogger.operations.AbstractGCodeOperationWithResult;
 import com.trolololo.workbee.jogger.operations.AbstractOperation;
+import com.trolololo.workbee.jogger.operations.GoToZeroOperation;
 import com.trolololo.workbee.jogger.operations.HomeOperation;
 import com.trolololo.workbee.jogger.operations.MoveOperation;
 import com.trolololo.workbee.jogger.operations.MoveParams;
+import com.trolololo.workbee.jogger.operations.SetZeroOperation;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -70,7 +73,8 @@ public class JogActivity extends AppCompatActivity {
                 .put(Buttons.STEP_SMALL, findViewById(R.id.button_step_small))
                 .build()
         ));
-        jogger.setClickCallback(this::runMove);
+        jogger.setMoveCallback(this::runMove);
+        jogger.setSetCallback(this::runSet);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -101,30 +105,9 @@ public class JogActivity extends AppCompatActivity {
             finish();
             return true;
         } else if (id == R.id.action_home) {
-            Log.i(TAG, "HOMING!");
-            if (AbstractOperation.isInProgress()) {
-                return true;
-            }
-
-            HomeOperation op = new HomeOperation(this, networkFragment, machine);
-            op.run(new AbstractOperation.OperationCallback() {
-                @Override
-                public void result(Object result) {
-                    setMenuVisibility();
-                }
-
-                @Override
-                public void error(String error) {
-                    Toast.makeText(JogActivity.this, error, Toast.LENGTH_LONG).show();
-                }
-
-                @Override
-                public void waitForPrevious() {
-                    Log.w(TAG, "homing operation in progress, not homing again");
-                }
-            });
-            setMenuVisibility();
-            return true;
+            return runOp(new HomeOperation(this, networkFragment, machine), "homing operation in progress, not homing again");
+        } else if (id == R.id.action_gotozero) {
+            return runOp(new GoToZeroOperation(this, networkFragment, machine), "Going to zero operation in progress, not doing it again again");
         }
 
         return super.onOptionsItemSelected(item);
@@ -150,9 +133,40 @@ public class JogActivity extends AppCompatActivity {
             MenuItem menuItem = menu.findItem(R.id.action_home);
             menuItem.setVisible(isOnline);
             menuItem.setEnabled(!AbstractOperation.isInProgress());
+            menuItem = menu.findItem(R.id.action_gotozero);
+            menuItem.setVisible(isOnline);
+            menuItem.setEnabled(!AbstractOperation.isInProgress());
         }
     }
 
+    private boolean runOp(AbstractGCodeOperationWithResult op, String waitingLogText) {
+        if (AbstractOperation.isInProgress()) {
+            return true;
+        }
+
+        op.run(new AbstractOperation.OperationCallback() {
+            @Override
+            public void result(Object result) {
+                setMenuVisibility();
+            }
+
+            @Override
+            public void error(String error) {
+                Toast.makeText(JogActivity.this, error, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void waitForPrevious() {
+                Log.w(TAG, waitingLogText);
+            }
+        });
+        setMenuVisibility();
+        return true;
+    }
+
+    private void runSet(Jogger.State state) {
+        runOp(new SetZeroOperation(this, networkFragment, machine), "Setting zero operation in progress, not doing it again");
+    }
 
     private void runMove(Jogger.State state) {
         if (state == null) {

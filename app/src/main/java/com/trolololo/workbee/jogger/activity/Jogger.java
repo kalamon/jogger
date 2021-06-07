@@ -26,7 +26,8 @@ public class Jogger extends View {
     private Buttons buttons;
     private State state;
     private String stepSize;
-    private TouchHandler touchHandler;
+    private TouchHandler moveHandler;
+    private TouchHandler setHandler;
 
     public class State {
         public final AbstractMoveOperation.Axis axis;
@@ -76,6 +77,7 @@ public class Jogger extends View {
             Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_z), R.color.colorAccent);
             setBackground(R.drawable.ic_jogz);
             setStepButtonsTexts(parent, true);
+            buttons.setSmall(true);
             setStepSize();
             return null;
         });
@@ -85,6 +87,7 @@ public class Jogger extends View {
             setBackground(R.drawable.ic_jog);
             setStepButtonsTexts(parent, false);
             setStepSize();
+            buttons.restoreSize();
             return null;
         });
         buttons.onBig(foo -> {
@@ -114,6 +117,9 @@ public class Jogger extends View {
             if (toolType == TOOL_TYPE_FINGER) {
                 if (action == MotionEvent.ACTION_DOWN || action == ACTION_POINTER_DOWN) {
                     Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_set), R.color.colorAccent);
+                    if (setHandler != null) {
+                        setHandler.pushed(state);
+                    }
                     Log.i(TAG, "WORK ZERO SET");
                 } else if (action == ACTION_UP || action == ACTION_POINTER_UP) {
                     Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_set), R.color.trolololo);
@@ -141,8 +147,12 @@ public class Jogger extends View {
         return state;
     }
 
-    public void setClickCallback(TouchHandler clickCallback) {
-        this.touchHandler = clickCallback;
+    public void setMoveCallback(TouchHandler callback) {
+        this.moveHandler = callback;
+    }
+
+    public void setSetCallback(TouchHandler callback) {
+        this.setHandler = callback;
     }
 
     private void setStepButtonsTexts(Activity parent, boolean isZ) {
@@ -169,8 +179,8 @@ public class Jogger extends View {
     private void handleDown(float x, float y) {
         state = calc(x, y);
         Log.i(TAG, "down: " + x + ", " + y + ", " + state);
-        if (state != null && touchHandler != null) {
-            touchHandler.pushed(state);
+        if (state != null && moveHandler != null) {
+            moveHandler.pushed(state);
         }
     }
 
