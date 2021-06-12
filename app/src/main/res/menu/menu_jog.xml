@@ -2,9 +2,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto" >
 
     <item
+        android:id="@+id/action_gotozero"
+        android:icon="@drawable/outline_gps_fixed_24"
+        android:orderInCategory="101"
+        android:title="@string/gotozero"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_home"
         android:icon="@drawable/outline_home_white_24"
         android:orderInCategory="101"
         android:title="@string/home"
         app:showAsAction="ifRoom" />
+
 </menu>

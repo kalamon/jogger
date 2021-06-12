@@ -173,6 +173,22 @@ public class Buttons {
         return isSmall;
     }
 
+    private boolean[] previousState = null;
+
+    public void setSmall(boolean savePrevious) {
+        if (savePrevious) {
+            previousState = new boolean[]{ isBig(), isMedium(), isSmall() };
+        }
+        handleSize(false, false, true);
+    }
+
+    public void restoreSize() {
+        if (previousState != null) {
+            handleSize(previousState[0], previousState[1], previousState[2]);
+            previousState = null;
+        }
+    }
+
     private void handleSize(boolean big, boolean medium, boolean small) {
         isBig = big;
         isMedium = medium;
