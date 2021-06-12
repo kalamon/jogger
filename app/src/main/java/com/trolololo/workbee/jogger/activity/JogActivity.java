@@ -131,11 +131,11 @@ public class JogActivity extends AppCompatActivity {
     private void setMenuVisibility() {
         if (menu != null) {
             MenuItem menuItem = menu.findItem(R.id.action_home);
-            menuItem.setVisible(isOnline);
-            menuItem.setEnabled(!AbstractOperation.isInProgress());
+//            menuItem.setVisible(isOnline);
+            menuItem.setEnabled(isOnline && !AbstractOperation.isInProgress());
             menuItem = menu.findItem(R.id.action_gotozero);
-            menuItem.setVisible(isOnline);
-            menuItem.setEnabled(!AbstractOperation.isInProgress());
+//            menuItem.setVisible(isOnline);
+            menuItem.setEnabled(isOnline && !AbstractOperation.isInProgress());
         }
     }
 

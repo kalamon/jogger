@@ -91,7 +91,7 @@ public abstract class AbstractGCodeOperationWithResult extends AbstractOperation
                     }
                 }
             );
-        }, 300, TimeUnit.MILLISECONDS);
+        }, 200, TimeUnit.MILLISECONDS);
     }
 
     private void readResult(OperationCallbackInternal callback) {
@@ -112,6 +112,6 @@ public abstract class AbstractGCodeOperationWithResult extends AbstractOperation
                     }
                 }
             );
-        }, 100, TimeUnit.MILLISECONDS);
+        }, 10, TimeUnit.MILLISECONDS);
     }
 }

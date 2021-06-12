@@ -7,7 +7,7 @@ import com.trolololo.workbee.jogger.network.JsonOp;
 import com.trolololo.workbee.jogger.network.NetworkFragment;
 
 public abstract class OperationNetworkCallback extends BaseNetworkCallback {
-    private NetworkFragment fragment;
+    private final NetworkFragment fragment;
 
     public OperationNetworkCallback(Context context, NetworkFragment fragment) {
         super(context);

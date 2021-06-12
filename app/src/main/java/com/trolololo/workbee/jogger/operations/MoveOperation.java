@@ -6,7 +6,7 @@ import com.trolololo.workbee.jogger.domain.Machine;
 import com.trolololo.workbee.jogger.network.NetworkFragment;
 
 public class MoveOperation extends AbstractMoveOperation {
-    private MoveParams params;
+    private final MoveParams params;
 
     public MoveOperation(Context context, NetworkFragment networkFragment, Machine machine, MoveParams params) {
         super(context, networkFragment, machine);

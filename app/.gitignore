@@ -1,3 +1,5 @@
 /build
 /release/app-release.aab
 /debug/app-debug.aab
+/debug/
+/release/
