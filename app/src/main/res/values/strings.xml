@@ -68,4 +68,13 @@
     <string name="home">Home</string>
     <string name="feedback">Feedback</string>
     <string name="gotozero">Go to zero</string>
+    <string name="step_size_title">Step size</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="step_size">Step size</string>
+    <string name="set_axis_title">Set work zero for</string>
+    <string name="xy_axis">XY</string>
+    <string name="z_axis">Z</string>
+    <string name="xyz_axis">XYZ</string>
+    <string name="set_axis_result">Work zero set for %1$s</string>
 </resources>

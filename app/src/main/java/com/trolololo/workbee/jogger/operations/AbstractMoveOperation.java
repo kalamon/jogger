@@ -49,6 +49,6 @@ public abstract class AbstractMoveOperation extends AbstractGCodeOperationWithRe
 
     @Override
     protected String getGcode() {
-        return "M120\nG91\nG1 " + getAxis() + getDirection() + getAmount() + " F360000\nG90\nM121";
+        return "M120\nG91\nG1 " + getAxis() + getDirection() + getAmount().replace(",", ".") + " F360000\nG90\nM121";
     }
 }

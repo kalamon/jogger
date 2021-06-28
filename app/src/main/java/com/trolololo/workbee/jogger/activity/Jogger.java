@@ -120,12 +120,16 @@ public class Jogger extends View {
                     if (setHandler != null) {
                         setHandler.pushed(state);
                     }
-                    Log.i(TAG, "WORK ZERO SET");
                 } else if (action == ACTION_UP || action == ACTION_POINTER_UP) {
                     Utils.setBackgroundTint(parent, parent.findViewById(R.id.button_set), R.color.trolololo);
                 }
             }
 
+            return null;
+        });
+        buttons.onStepSizeChanged(event -> {
+            setStepButtonsTexts(parent, buttons.isZ());
+            setStepSize();
             return null;
         });
     }
@@ -167,18 +171,18 @@ public class Jogger extends View {
 
     private void handleMove(float x, float y) {
         state = calc(x, y);
-        Log.i(TAG, "move: " + x + ", " + y + ", " + state);
+//        Log.i(TAG, "move: " + x + ", " + y + ", " + state);
     }
 
     private void handleUp(float x, float y) {
         setBackground(buttons.isZ() ? R.drawable.ic_jogz : R.drawable.ic_jog);
-        Log.i(TAG, "up: " + x + ", " + y);
+//        Log.i(TAG, "up: " + x + ", " + y);
         state = null;
     }
 
     private void handleDown(float x, float y) {
         state = calc(x, y);
-        Log.i(TAG, "down: " + x + ", " + y + ", " + state);
+//        Log.i(TAG, "down: " + x + ", " + y + ", " + state);
         if (state != null && moveHandler != null) {
             moveHandler.pushed(state);
         }

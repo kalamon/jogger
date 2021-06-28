@@ -71,6 +71,7 @@
                 android:layout_marginRight="20dp"
                 android:width="110dp"
                 android:backgroundTint="@color/colorAccent"
+                android:longClickable="true"
                 android:text="50"
                 android:textSize="20sp"
                 app:cornerRadius="50dp" />
@@ -81,6 +82,7 @@
                 android:layout_height="80dp"
                 android:layout_gravity="center"
                 android:width="110dp"
+                android:longClickable="true"
                 android:text="10"
                 android:textSize="20sp"
                 app:cornerRadius="50dp" />
@@ -92,6 +94,7 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="20dp"
                 android:width="110dp"
+                android:longClickable="true"
                 android:text="0.1"
                 android:textSize="20sp"
                 app:cornerRadius="50dp" />

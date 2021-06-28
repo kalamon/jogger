@@ -3,11 +3,17 @@ package com.trolololo.workbee.jogger.activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+import com.trolololo.workbee.jogger.R;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -24,26 +30,28 @@ public class Buttons {
     public static final String STEP_BIG = "step_big";
     public static final String STEP_MEDIUM = "step_medium";
     public static final String STEP_SMALL = "step_small";
+    public static final String STEP_SIZE = ".stepSize.";
     public static final String IS_Z = "isZ";
     public static final String IS_BIG = "isBig";
     public static final String IS_MEDIUM = "isMedium";
     public static final String IS_SMALL = "isSmall";
 
-    public static final Map<String, String> STEP_SIZES = ImmutableMap.<String, String>builder()
+    public static final Map<String, String> STEP_SIZES = Maps.newHashMap(ImmutableMap.<String, String>builder()
         .put(STEP_BIG, "50")
         .put(STEP_MEDIUM, "10")
         .put(STEP_SMALL, "0.1")
         .put(STEP_BIG + Z, "25")
         .put(STEP_MEDIUM + Z, "5")
         .put(STEP_SMALL + Z, "0.05")
-        .build();
+        .build());
 
-    private SharedPreferences preferences;
+    private final SharedPreferences preferences;
     private Function<Void, Void> onZCallback;
     private Function<Void, Void> onXYCallback;
     private Function<Void, Void> onBigCallback;
     private Function<Void, Void> onMediumCallback;
     private Function<Void, Void> onSmallCallback;
+    private Function<Void, Void> onStepSizeChangedCallback;
     private Function<MotionEvent, Void> onSetCallback;
 
     private boolean isZ = false;
@@ -53,6 +61,7 @@ public class Buttons {
 
     public Buttons(Context context, Map<String, View> buttonMap) {
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        setInitialStepSizes();
 
         View buttonZ = buttonMap.get(Z);
         buttonZ.setOnTouchListener((v, event) -> {
@@ -79,27 +88,28 @@ public class Buttons {
             return true;
         });
         View buttonBig = buttonMap.get(STEP_BIG);
-        buttonBig.setOnTouchListener((v, event) -> {
-            buttonBig.performClick();
-            if (isPush(event)) {
-                handleSize(true, false, false);
-            }
-            return true;
+        buttonBig.setOnClickListener(v -> {
+            handleSize(true, false, false);
         });
         View buttonMedium = buttonMap.get(STEP_MEDIUM);
-        buttonMedium.setOnTouchListener((v, event) -> {
-            buttonMedium.performClick();
-            if (isPush(event)) {
-                handleSize(false, true, false);
-            }
-            return true;
+        buttonMedium.setOnClickListener(v -> {
+            handleSize(false, true, false);
         });
         View buttonSmall = buttonMap.get(STEP_SMALL);
-        buttonSmall.setOnTouchListener((v, event) -> {
-            buttonSmall.performClick();
-            if (isPush(event)) {
-                handleSize(false, false, true);
-            }
+        buttonSmall.setOnClickListener(v -> {
+            handleSize(false, false, true);
+        });
+
+        buttonBig.setOnLongClickListener(event -> {
+            showStepSizeDialog(context, true, false, false, isZ);
+            return true;
+        });
+        buttonMedium.setOnLongClickListener(event -> {
+            showStepSizeDialog(context, false, true, false, isZ);
+            return true;
+        });
+        buttonSmall.setOnLongClickListener(event -> {
+            showStepSizeDialog(context, false, false, true, isZ);
             return true;
         });
 
@@ -116,6 +126,17 @@ public class Buttons {
         isBig = !Objects.equal(load(IS_BIG, "true"), "false");
         isMedium = !Objects.equal(load(IS_MEDIUM, "false"), "false");
         isSmall = !Objects.equal(load(IS_SMALL, "false"), "false");
+    }
+
+    private void setInitialStepSizes() {
+        String[] keys = { STEP_BIG, STEP_MEDIUM, STEP_SMALL, STEP_BIG + Z, STEP_MEDIUM + Z, STEP_SMALL + Z };
+
+        for (String key : keys) {
+            String val = load(STEP_SIZE + key, null);
+            if (val != null) {
+                STEP_SIZES.put(key, val);
+            }
+        }
     }
 
     public void onZ(Function<Void, Void> f) {
@@ -153,6 +174,11 @@ public class Buttons {
         }
     }
 
+    public void onStepSizeChanged(Function<Void, Void> f) {
+        onStepSizeChangedCallback = f;
+        onStepSizeChangedCallback.apply(null);
+    }
+
     public void onSet(Function<MotionEvent, Void> f) {
         onSetCallback = f;
     }
@@ -186,6 +212,57 @@ public class Buttons {
         if (previousState != null) {
             handleSize(previousState[0], previousState[1], previousState[2]);
             previousState = null;
+        }
+    }
+
+    private void showStepSizeDialog(Context context, boolean big, boolean medium, boolean small, boolean isZ) {
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.step_size, null);
+        String initValue = "0";
+        String suffix = isZ ? Z : "";
+        if (big) {
+            initValue = STEP_SIZES.get(STEP_BIG + suffix);
+        } else if (medium) {
+            initValue = STEP_SIZES.get(STEP_MEDIUM + suffix);
+        } else if (small) {
+            initValue = STEP_SIZES.get(STEP_SMALL + suffix);
+        }
+        EditText valueInput = view.findViewById(R.id.step_size_value);
+        valueInput.setText(initValue);
+        if (small) {
+            valueInput.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        }
+
+        new MaterialAlertDialogBuilder(context)
+            .setView(view)
+            .setPositiveButton(R.string.ok, (dialog, which) -> {
+                EditText numberDecimal = view.findViewById(R.id.step_size_value);
+                String text = numberDecimal.getText().toString();
+                if (text.trim().length() > 0) {
+                    Double value = Double.parseDouble(text);
+                    setStepSize(big, medium, small, isZ, value);
+                }
+            })
+            .setNeutralButton(R.string.cancel, (dialog, which) -> {})
+            .show();
+    }
+
+    private void setStepSize(boolean big, boolean medium, boolean small, boolean isZ, Double value) {
+        String suffix = isZ ? Z : "";
+        String key = "";
+        String valueString = "" + value.intValue();
+        if (big) {
+            key = STEP_BIG + suffix;
+        } else if (medium) {
+            key = STEP_MEDIUM + suffix;
+        } else if (small) {
+            key = STEP_SMALL + suffix;
+            valueString = "" + value;
+        }
+        STEP_SIZES.put(key, valueString);
+        save(STEP_SIZE + key, valueString);
+        if (onStepSizeChangedCallback != null) {
+            onStepSizeChangedCallback.apply(null);
         }
     }
 

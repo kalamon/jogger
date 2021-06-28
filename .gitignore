@@ -14,3 +14,8 @@
 .cxx
 local.properties
 /keystore/keystore.jks
+/nginx
+/.settings/
+/app/.settings/
+/app/
+/.project

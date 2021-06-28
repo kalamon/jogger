@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -131,15 +132,17 @@ public class JogActivity extends AppCompatActivity {
     private void setMenuVisibility() {
         if (menu != null) {
             MenuItem menuItem = menu.findItem(R.id.action_home);
-//            menuItem.setVisible(isOnline);
             menuItem.setEnabled(isOnline && !AbstractOperation.isInProgress());
             menuItem = menu.findItem(R.id.action_gotozero);
-//            menuItem.setVisible(isOnline);
             menuItem.setEnabled(isOnline && !AbstractOperation.isInProgress());
         }
     }
 
     private boolean runOp(AbstractGCodeOperationWithResult op, String waitingLogText) {
+        return runOp(op, waitingLogText, null);
+    }
+
+    private boolean runOp(AbstractGCodeOperationWithResult op, String waitingLogText, String successText) {
         if (AbstractOperation.isInProgress()) {
             return true;
         }
@@ -147,6 +150,9 @@ public class JogActivity extends AppCompatActivity {
         op.run(new AbstractOperation.OperationCallback() {
             @Override
             public void result(Object result) {
+                if (successText != null) {
+                    Toast.makeText(JogActivity.this, successText, Toast.LENGTH_LONG).show();
+                }
                 setMenuVisibility();
             }
 
@@ -165,7 +171,27 @@ public class JogActivity extends AppCompatActivity {
     }
 
     private void runSet(Jogger.State state) {
-        runOp(new SetZeroOperation(this, networkFragment, machine), "Setting zero operation in progress, not doing it again");
+        String[] axises = {
+            getString(R.string.xy_axis),
+            getString(R.string.z_axis),
+            getString(R.string.xyz_axis)
+        };
+        SetZeroOperation.Axis[] directions = {
+            SetZeroOperation.Axis.XY,
+            SetZeroOperation.Axis.Z,
+            SetZeroOperation.Axis.XYZ
+        };
+        new MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.set_axis_title)
+            .setItems(axises, (dialog, which) -> {
+                Log.w(TAG, "clicked " + which);
+                runOp(
+                        new SetZeroOperation(this, directions[which], networkFragment, machine),
+                        "Setting zero operation in progress, not doing it again",
+                        String.format(getString(R.string.set_axis_result), axises[which])
+                );
+            })
+            .show();
     }
 
     private void runMove(Jogger.State state) {
