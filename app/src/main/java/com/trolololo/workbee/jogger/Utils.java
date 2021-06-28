@@ -5,10 +5,18 @@ import android.view.View;
 
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.trolololo.workbee.jogger.network.HttpErrorException;
 import com.trolololo.workbee.jogger.network.JsonOp;
 
 public class Utils {
+    public static void showHelp(Context context) {
+        new MaterialAlertDialogBuilder(context)
+                .setView(R.layout.help)
+                .setTitle(R.string.help)
+                .show();
+    }
+
     public static void setBackgroundTint(Context context, View view, int color) {
         view.setBackgroundTintList(ContextCompat.getColorStateList(context, color));
     }

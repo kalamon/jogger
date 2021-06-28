@@ -3,8 +3,10 @@ package com.trolololo.workbee.jogger.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.Menu;
@@ -22,6 +24,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.trolololo.workbee.jogger.R;
+import com.trolololo.workbee.jogger.Utils;
 import com.trolololo.workbee.jogger.adapter.MachineAdapter;
 import com.trolololo.workbee.jogger.domain.Machine;
 
@@ -70,9 +73,22 @@ public class MachineListActivity
 
         ((TextView) findViewById(R.id.add_profile_text)).setText(Html.fromHtml(getString(R.string.add_machine_description), FROM_HTML_MODE_COMPACT));
 
+        maybeShowHelp();
         Machine lastOpenMachine = setupListView();
         if (lastOpenMachine != null) {
             openProfile(lastOpenMachine);
+        }
+    }
+
+    private void maybeShowHelp() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String key = getClass().getCanonicalName() + ".helpShown";
+        boolean helpShown = preferences.getBoolean(key, false);
+        if (!helpShown) {
+            Utils.showHelp(this);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(key, true);
+            editor.apply();
         }
     }
 
@@ -193,6 +209,8 @@ public class MachineListActivity
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             return true;
+        } else if (id == R.id.nav_help) {
+            Utils.showHelp(this);
         } else if (id == R.id.nav_info) {
             Intent intent = new Intent(this, AboutActivity.class);
             startActivity(intent);

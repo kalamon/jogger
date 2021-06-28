@@ -17,5 +17,6 @@ local.properties
 /nginx
 /.settings/
 /app/.settings/
-/app/
 /.project
+/app/.classpath
+/app/.project

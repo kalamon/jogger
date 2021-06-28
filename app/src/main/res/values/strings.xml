@@ -36,7 +36,7 @@
     <string name="pref_description_connect_timeout">Connection timeout of a network call (in seconds)</string>
     <string name="pref_description_read_timeout">Read timeout of a network call (in seconds)</string>
     <string name="drawer_title">Duet CNC Jogger</string>
-    <string name="drawer_copyright">&#169; 2021 <![CDATA[<a href="http://trolololo-software.com">Troololo</a>]]></string>
+    <string name="drawer_copyright">&#169; 2021 <![CDATA[<a href="http://trolololo-software.com">Trolololo</a>]]></string>
     <string name="title_activity_about">About Duet CNC Jogger</string>
     <string name="about_license"><![CDATA[
             <p style=\"text-align:center;\">
@@ -67,7 +67,7 @@
     <string name="home_and_coords">%1$s, %2$s, X=%3$.2f, Y=%4$.2f, Z=%5$.2f</string>
     <string name="home">Home</string>
     <string name="feedback">Feedback</string>
-    <string name="gotozero">Go to zero</string>
+    <string name="gotozero">Go to work zero</string>
     <string name="step_size_title">Step size</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -77,4 +77,8 @@
     <string name="z_axis">Z</string>
     <string name="xyz_axis">XYZ</string>
     <string name="set_axis_result">Work zero set for %1$s</string>
+    <string name="help">Help</string>
+    <string name="long_press_help">Press and hold machine address to edit or delete</string>
+    <string name="header_icons">Header icons</string>
+    <string name="step_long_press_help">Press and hold step size button to edit step size</string>
 </resources>

@@ -11,6 +11,10 @@
     <item android:title="@string/about">
         <menu>
             <item
+                android:id="@+id/nav_help"
+                android:icon="@drawable/outline_help_outline_24"
+                android:title="@string/help" />
+            <item
                 android:id="@+id/nav_info"
                 android:icon="@drawable/ic_info_outline_black_24px"
                 android:title="@string/information" />
