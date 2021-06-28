@@ -13,7 +13,7 @@ import java.net.URLEncoder;
 import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractGCodeOperationWithResult extends AbstractOperation {
-    private static final String TAG = HomeOperation.class.getName();
+    private static final String TAG = AbstractGCodeOperationWithResult.class.getName();
 
     public AbstractGCodeOperationWithResult(Context context, NetworkFragment networkFragment, Machine machine) {
         super(context, networkFragment, machine);
@@ -27,18 +27,19 @@ public abstract class AbstractGCodeOperationWithResult extends AbstractOperation
             String url = machine.getUrl() + "/rr_gcode?gcode=" + URLEncoder.encode(getGcode(), "utf-8").replace("+", "%20");
             Log.d(TAG, "GET at " + url);
             networkFragment.get(url,
-            null, null,
-            new OperationNetworkCallback(context, networkFragment) {
-                @Override
-                public void updateInternal() {
-                    JsonOp.Result result = getResult();
-                    if (result.exception != null) {
-                        callback.result(result);
-                    } else {
-                        waitForStop(callback);
+                null, null,
+                new OperationNetworkCallback(context, networkFragment) {
+                    @Override
+                    public void updateInternal() {
+                        JsonOp.Result result = getResult();
+                        if (result.exception != null) {
+                             callback.result(result);
+                        } else {
+                            waitForStop(callback);
+                        }
                     }
                 }
-            });
+            );
         } catch (UnsupportedEncodingException e) {
             callback.result(new JsonOp.Result(e));
         }

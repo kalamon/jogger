@@ -44,7 +44,7 @@
             </p>
             <p style=\"font-size:small; text-align:center;\">
                 Licensed under <a style=\"color: #0A7BC0\" href=\"http://www.apache.org/licenses/LICENSE-2.0\">Apache License</a><br/>
-                <a style=\"color: #0A7BC0\" href=\"https://github.com/kalamon/jogger\">Source code</a>
+                <a style=\"color: #0A7BC0\" href=\"https://github.com/kalamon/jogger\">Source code</a>&nbsp;|&nbsp;<a style=\"color: #0A7BC0\" href=\"https://github.com/kalamon/jogger/CREDITS.md\">Credits</a>
             </p>
         ]]>
     </string>
@@ -81,4 +81,7 @@
     <string name="long_press_help">Press and hold machine address to edit or delete</string>
     <string name="header_icons">Header icons</string>
     <string name="step_long_press_help">Press and hold step size button to edit step size</string>
+    <string name="general">General</string>
+    <string name="enable_haptic_feedback">Enable haptic feedback</string>
+    <string name="haptic_feedback_description">Vibrate while holding jogging buttons</string>
 </resources>

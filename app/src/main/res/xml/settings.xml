@@ -4,6 +4,15 @@
 >
 
     <PreferenceCategory
+        app:icon="@drawable/ic_settings_black_24px"
+        app:title="@string/general">
+        <CheckBoxPreference
+            app:defaultValue="true"
+            app:key="preference_enable_haptic_feedback"
+            app:title="@string/enable_haptic_feedback"
+            app:summary="@string/haptic_feedback_description"/>
+    </PreferenceCategory>
+    <PreferenceCategory
         app:icon="@drawable/ic_settings_ethernet_black_24px"
         app:title="@string/pref_header_network"
         app:initialExpandedChildrenCount="2"

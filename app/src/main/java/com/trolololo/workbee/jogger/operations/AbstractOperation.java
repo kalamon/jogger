@@ -9,9 +9,10 @@ import com.trolololo.workbee.jogger.network.NetworkFragment;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class AbstractOperation {
-    private static boolean inProgress;
+    private static final AtomicBoolean inProgress = new AtomicBoolean(false);
 
     protected static final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
 
@@ -23,10 +24,11 @@ public abstract class AbstractOperation {
         void result(Object result);
         void error(String error);
         void waitForPrevious();
+        void done();
     }
 
     public static boolean isInProgress() {
-        return inProgress;
+        return inProgress.get();
     }
 
     public AbstractOperation(Context context, NetworkFragment networkFragment, Machine machine) {
@@ -40,21 +42,21 @@ public abstract class AbstractOperation {
     }
 
     public void run(OperationCallback callback) {
-        if (inProgress) {
+        if (inProgress.getAndSet(true)) {
             callback.waitForPrevious();
             return;
         }
-        inProgress = true;
         Executors.newSingleThreadExecutor().submit(() -> {
             networkFragment.cancel();
 
             runInternal(result -> {
-                inProgress = false;
+                inProgress.set(false);
                 if (result.exception != null) {
                     callback.error(Utils.describeException(context, result.exception));
                 } else {
                     interpretResponse(result, callback);
                 }
+                callback.done();
             });
         });
     }

@@ -1,6 +1,9 @@
 package com.trolololo.workbee.jogger.activity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,10 +38,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class JogActivity extends AppCompatActivity {
     private static final String TAG = JogActivity.class.getName();
     public static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
+    private static final ScheduledExecutorService DELAYED_EXECUTOR = Executors.newScheduledThreadPool(1);
 
     private Machine machine;
 
@@ -46,6 +52,8 @@ public class JogActivity extends AppCompatActivity {
 
     private NetworkFragment onlineStatusNetworkFragment;
     private NetworkFragment networkFragment;
+    private Vibrator vibrator;
+    private SharedPreferences preferences;
 
     private Timer timer;
     private boolean isOnline = false;
@@ -53,6 +61,9 @@ public class JogActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         machine = (Machine) getIntent().getSerializableExtra(Machine.class.getCanonicalName());
         Machine.setLastOpenProfile(this, machine);
@@ -130,12 +141,17 @@ public class JogActivity extends AppCompatActivity {
     }
 
     private void setMenuVisibility() {
-        if (menu != null) {
-            MenuItem menuItem = menu.findItem(R.id.action_home);
-            menuItem.setEnabled(isOnline && !AbstractOperation.isInProgress());
-            menuItem = menu.findItem(R.id.action_gotozero);
-            menuItem.setEnabled(isOnline && !AbstractOperation.isInProgress());
-        }
+        DELAYED_EXECUTOR.schedule(() -> {
+            runOnUiThread(() -> {
+                if (menu != null) {
+                    MenuItem menuItem = menu.findItem(R.id.action_home);
+                    boolean enabled = isOnline && !AbstractOperation.isInProgress();
+                    menuItem.setEnabled(enabled);
+                    menuItem = menu.findItem(R.id.action_gotozero);
+                    menuItem.setEnabled(enabled);
+                }
+            });
+        }, 100, TimeUnit.MILLISECONDS);
     }
 
     private boolean runOp(AbstractGCodeOperationWithResult op, String waitingLogText) {
@@ -153,7 +169,6 @@ public class JogActivity extends AppCompatActivity {
                 if (successText != null) {
                     Toast.makeText(JogActivity.this, successText, Toast.LENGTH_LONG).show();
                 }
-                setMenuVisibility();
             }
 
             @Override
@@ -164,6 +179,11 @@ public class JogActivity extends AppCompatActivity {
             @Override
             public void waitForPrevious() {
                 Log.w(TAG, waitingLogText);
+            }
+
+            @Override
+            public void done() {
+                setMenuVisibility();
             }
         });
         setMenuVisibility();
@@ -208,8 +228,11 @@ public class JogActivity extends AppCompatActivity {
         moveOperation.run(new AbstractOperation.OperationCallback() {
             @Override
             public void result(Object result) {
-                Jogger jogger = findViewById(R.id.jogger);
-                runMove(jogger.getState());
+                runOnUiThread(() -> {
+                    Jogger jogger = findViewById(R.id.jogger);
+                    Utils.vibrate(vibrator, preferences);
+                    runMove(jogger.getState());
+                });
             }
 
             @Override
@@ -221,7 +244,13 @@ public class JogActivity extends AppCompatActivity {
             public void waitForPrevious() {
                 Log.w(TAG, "move operation in progress, not moving again");
             }
+
+            @Override
+            public void done() {
+                setMenuVisibility();
+            }
         });
+        setMenuVisibility();
     }
 
     private void scheduleOnlinePing() {

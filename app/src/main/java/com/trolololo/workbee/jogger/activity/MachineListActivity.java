@@ -151,6 +151,9 @@ public class MachineListActivity
     }
 
     private void setMenuVisibility() {
+        if (menu == null) {
+            return;
+        }
         MenuItem item1 = menu.findItem(R.id.action_edit);
         MenuItem item2 = menu.findItem(R.id.action_delete);
         item1.setVisible(selectedMachine != null);
