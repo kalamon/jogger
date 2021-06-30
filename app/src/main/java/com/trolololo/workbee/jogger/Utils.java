@@ -2,7 +2,6 @@ package com.trolololo.workbee.jogger;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
@@ -15,8 +14,6 @@ import com.trolololo.workbee.jogger.network.JsonOp;
 
 public class Utils {
     private static final String TAG = Utils.class.getName();
-    private static VibrationEffect VIBRATION_EFFECT = VibrationEffect.createOneShot(50, 255);
-
 
     public static void showHelp(Context context) {
         new MaterialAlertDialogBuilder(context)
@@ -29,7 +26,7 @@ public class Utils {
         boolean hapticsEnabled = preferences.getBoolean("preference_enable_haptic_feedback", true);
         if (hapticsEnabled) {
             try {
-                vibrator.vibrate(VIBRATION_EFFECT);
+                vibrator.vibrate(50);
             } catch (Exception e) {
                 Log.w(TAG, "Failed to vibrate", e);
             }
