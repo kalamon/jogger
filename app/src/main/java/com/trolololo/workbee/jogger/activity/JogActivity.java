@@ -58,6 +58,8 @@ public class JogActivity extends AppCompatActivity {
     private Timer timer;
     private boolean isOnline = false;
 
+    private boolean isWorking = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,7 +147,7 @@ public class JogActivity extends AppCompatActivity {
             runOnUiThread(() -> {
                 if (menu != null) {
                     MenuItem menuItem = menu.findItem(R.id.action_home);
-                    boolean enabled = isOnline && !AbstractOperation.isInProgress();
+                    boolean enabled = isOnline && !isWorking && !AbstractOperation.isInProgress();
                     menuItem.setEnabled(enabled);
                     menuItem = menu.findItem(R.id.action_gotozero);
                     menuItem.setEnabled(enabled);
@@ -301,10 +303,16 @@ public class JogActivity extends AppCompatActivity {
                             } else {
                                 OnlineLabel label = findViewById(R.id.online_label);
                                 isOnline = result.exception == null && result.json != null;
-                                String text = isOnline ? getHomeAndCoords(result.json) : getString(R.string.offline);
+                                String status = getStatus(result.json);
+                                isWorking = !status.equalsIgnoreCase("I") && !status.equalsIgnoreCase("B");
+                                String text = isOnline
+                                        ? isWorking
+                                            ? getString(R.string.working)
+                                            : getHomeAndCoords(result.json)
+                                        : getString(R.string.offline);
                                 label.setOnline(isOnline, text);
                                 setMenuVisibility();
-                                findViewById(R.id.cover_glass).setVisibility(isOnline ? View.GONE : View.VISIBLE);
+                                findViewById(R.id.cover_glass).setVisibility(isOnline && !isWorking ? View.GONE : View.VISIBLE);
                             }
                         }
 
@@ -313,6 +321,15 @@ public class JogActivity extends AppCompatActivity {
                 }
             );
         });
+    }
+
+    private String getStatus(JsonElement json) {
+        JsonObject o = json.getAsJsonObject();
+        JsonElement status = o.get("status");
+        if (status == null) {
+            throw new IllegalArgumentException("'status' property is expected");
+        }
+        return status.getAsString();
     }
 
     private String getHomeAndCoords(JsonElement json) {
