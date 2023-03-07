@@ -36,7 +36,7 @@
     <string name="pref_description_connect_timeout">Connection timeout of a network call (in seconds)</string>
     <string name="pref_description_read_timeout">Read timeout of a network call (in seconds)</string>
     <string name="drawer_title">Duet CNC Jogger</string>
-    <string name="drawer_copyright">&#169; 2021 <![CDATA[<a href="http://trolololo-software.com">Trolololo</a>]]></string>
+    <string name="drawer_copyright">&#169; 2021-2023 <![CDATA[<a href="http://trolololo-software.com">Trolololo</a>]]></string>
     <string name="title_activity_about">About Duet CNC Jogger</string>
     <string name="about_license"><![CDATA[
             <p style=\"text-align:center;\">
@@ -64,6 +64,7 @@
     <string name="online">Online</string>
     <string name="offline">Offline</string>
     <string name="error">Error</string>
+    <string name="working">Working</string>
     <string name="home_and_coords">%1$s, %2$s, X=%3$.2f, Y=%4$.2f, Z=%5$.2f</string>
     <string name="home">Home</string>
     <string name="feedback">Feedback</string>
