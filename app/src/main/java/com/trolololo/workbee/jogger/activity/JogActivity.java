@@ -59,6 +59,8 @@ public class JogActivity extends AppCompatActivity {
     private Timer timer;
     private boolean isOnline = false;
 
+    private boolean isWorking = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,6 +123,18 @@ public class JogActivity extends AppCompatActivity {
             return runOp(new HomeOperation(this, networkFragment, machine), "homing operation in progress, not homing again");
         } else if (id == R.id.action_gotozero) {
             return runOp(new GoToZeroOperation(this, networkFragment, machine), "Going to zero operation in progress, not doing it again again");
+        } else if (id == R.id.action_probez) {
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle(R.string.probez_proceed)
+                    .setCancelable(true)
+                    .setPositiveButton(R.string.yes, (dialog, which) -> {
+                        runOp(new ProbeZOperation(this, networkFragment, machine),
+                                "Probing in progress, not doing it again",
+                                getString(R.string.probez_complete));
+                    })
+                    .setNegativeButton(R.string.no, (dialog, which) -> {
+                    })
+                    .show();
         }
 
         return super.onOptionsItemSelected(item);
@@ -145,10 +159,12 @@ public class JogActivity extends AppCompatActivity {
         DELAYED_EXECUTOR.schedule(() -> {
             runOnUiThread(() -> {
                 if (menu != null) {
+                    boolean enabled = isOnline && !isWorking && !AbstractOperation.isInProgress();
                     MenuItem menuItem = menu.findItem(R.id.action_home);
-                    boolean enabled = isOnline && !AbstractOperation.isInProgress();
                     menuItem.setEnabled(enabled);
                     menuItem = menu.findItem(R.id.action_gotozero);
+                    menuItem.setEnabled(enabled);
+                    menuItem = menu.findItem(R.id.action_probez);
                     menuItem.setEnabled(enabled);
                 }
             });
@@ -302,10 +318,16 @@ public class JogActivity extends AppCompatActivity {
                             } else {
                                 OnlineLabel label = findViewById(R.id.online_label);
                                 isOnline = result.exception == null && result.json != null;
-                                String text = isOnline ? getHomeAndCoords(result.json) : getString(R.string.offline);
+                                String status = getStatus(result.json);
+                                isWorking = !status.equalsIgnoreCase("I") && !status.equalsIgnoreCase("B");
+                                String text = isOnline
+                                        ? isWorking
+                                            ? getString(R.string.working)
+                                            : getHomeAndCoords(result.json)
+                                        : getString(R.string.offline);
                                 label.setOnline(isOnline, text);
                                 setMenuVisibility();
-                                findViewById(R.id.cover_glass).setVisibility(isOnline ? View.GONE : View.VISIBLE);
+                                findViewById(R.id.cover_glass).setVisibility(isOnline && !isWorking ? View.GONE : View.VISIBLE);
                             }
                         }
 
@@ -314,6 +336,15 @@ public class JogActivity extends AppCompatActivity {
                 }
             );
         });
+    }
+
+    private String getStatus(JsonElement json) {
+        JsonObject o = json.getAsJsonObject();
+        JsonElement status = o.get("status");
+        if (status == null) {
+            throw new IllegalArgumentException("'status' property is expected");
+        }
+        return status.getAsString();
     }
 
     private String getHomeAndCoords(JsonElement json) {
