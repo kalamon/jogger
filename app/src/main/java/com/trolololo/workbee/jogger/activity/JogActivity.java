@@ -318,8 +318,8 @@ public class JogActivity extends AppCompatActivity {
                             } else {
                                 OnlineLabel label = findViewById(R.id.online_label);
                                 isOnline = result.exception == null && result.json != null;
-                                String status = getStatus(result.json);
-                                isWorking = !status.equalsIgnoreCase("I") && !status.equalsIgnoreCase("B");
+                                String status = isOnline ? getStatus(result.json) : "";
+                                isWorking = isOnline && !status.equalsIgnoreCase("I") && !status.equalsIgnoreCase("B");
                                 String text = isOnline
                                         ? isWorking
                                             ? getString(R.string.working)
