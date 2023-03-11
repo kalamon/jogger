@@ -9,6 +9,13 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/action_probez"
+        android:icon="@drawable/probe_z"
+        android:orderInCategory="101"
+        android:title="@string/probez"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_home"
         android:icon="@drawable/outline_home_24"
         android:orderInCategory="101"

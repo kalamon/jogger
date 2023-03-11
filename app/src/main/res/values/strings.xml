@@ -85,4 +85,7 @@
     <string name="general">General</string>
     <string name="enable_haptic_feedback">Enable haptic feedback</string>
     <string name="haptic_feedback_description">Vibrate while holding jogging buttons</string>
+    <string name="probez">Probe Z</string>
+    <string name="probez_complete">Probing Z complete. Remove probe</string>
+    <string name="probez_proceed">Do you want to probe Z?</string>
 </resources>
