@@ -1,6 +1,5 @@
 package com.trolololo.workbee.jogger.activity;
 
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -33,6 +32,7 @@ import com.trolololo.workbee.jogger.operations.GoToZeroOperation;
 import com.trolololo.workbee.jogger.operations.HomeOperation;
 import com.trolololo.workbee.jogger.operations.MoveOperation;
 import com.trolololo.workbee.jogger.operations.MoveParams;
+import com.trolololo.workbee.jogger.operations.ProbeZOperation;
 import com.trolololo.workbee.jogger.operations.SetZeroOperation;
 
 import java.util.Timer;
