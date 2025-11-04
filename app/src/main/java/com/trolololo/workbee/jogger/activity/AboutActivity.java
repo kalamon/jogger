@@ -10,8 +10,10 @@ import android.webkit.WebView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
 
 import com.trolololo.workbee.jogger.R;
+import com.trolololo.workbee.jogger.Utils;
 
 import static android.text.Html.FROM_HTML_MODE_COMPACT;
 
@@ -20,6 +22,8 @@ public class AboutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
         setContentView(R.layout.activity_about);
 
         TextView copyright = findViewById(R.id.about_copyright_link);
@@ -30,6 +34,7 @@ public class AboutActivity extends AppCompatActivity {
         license.loadDataWithBaseURL(null, "<html><body>" + getString(R.string.about_license) + "</body></html>", "text/html", "utf-8", null);
         license.setBackgroundColor(Color.TRANSPARENT);
 
+        Utils.unfuckLayoutForE2E(this, R.id.about_activity);
         TextView version = findViewById(R.id.about_version);
         try {
             PackageInfo pInfo;

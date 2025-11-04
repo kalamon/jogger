@@ -5,8 +5,14 @@ import android.content.SharedPreferences;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowInsets;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.trolololo.workbee.jogger.network.HttpErrorException;
@@ -50,5 +56,24 @@ public class Utils {
             return resultString.equals("unexpected end of stream");
         }
         return false;
+    }
+
+    public static void unfuckLayoutForE2E(AppCompatActivity a, int viewId) {
+        ViewCompat.setOnApplyWindowInsetsListener(a.findViewById(viewId), (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            mlp.leftMargin = insets.left;
+            mlp.bottomMargin = insets.bottom;
+            mlp.rightMargin = insets.right;
+
+            WindowInsets rwi = a.getWindow().getDecorView().getRootWindowInsets();
+            int statusBarHeight = rwi.getInsets(WindowInsetsCompat.Type.statusBars()).top;
+
+            mlp.topMargin = insets.top + statusBarHeight;
+            v.setLayoutParams(mlp);
+            a.getWindow().setStatusBarContrastEnforced(true);
+
+            return WindowInsetsCompat.CONSUMED;
+        });
     }
 }

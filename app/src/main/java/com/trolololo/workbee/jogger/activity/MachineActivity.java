@@ -6,15 +6,23 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.view.WindowInsets;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.common.collect.Lists;
 import com.trolololo.workbee.jogger.R;
+import com.trolololo.workbee.jogger.Utils;
 import com.trolololo.workbee.jogger.actionconfig.AbstractMachineActionConfig;
 import com.trolololo.workbee.jogger.actionconfig.Duet3DMachineActionConfig;
 import com.trolololo.workbee.jogger.domain.Machine;
@@ -43,11 +51,15 @@ public class MachineActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
         networkFragment = new ViewModelProvider(this).get(NetworkFragment.class);
         networkFragment.attach(this);
 
         setContentView(R.layout.activity_machine);
+
+        Utils.unfuckLayoutForE2E(this, R.id.activity_machine);
+
         setTitle(R.string.edit_machine);
         EditText url = findViewById(R.id.url);
 

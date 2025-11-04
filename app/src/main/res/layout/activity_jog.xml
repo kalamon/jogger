@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:fitsSystemWindows="true"
+    android:id="@+id/jog_activity"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
@@ -125,7 +127,6 @@
         android:id="@+id/cover_glass"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="20dp"
         android:background="#20000000"
         android:orientation="horizontal"
         android:visibility="visible"

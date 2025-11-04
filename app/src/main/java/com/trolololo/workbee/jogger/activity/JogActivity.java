@@ -8,10 +8,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -64,6 +69,7 @@ public class JogActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -73,6 +79,8 @@ public class JogActivity extends AppCompatActivity {
 
         setTitle(machine.getUrl());
         setContentView(R.layout.activity_jog);
+
+        Utils.unfuckLayoutForE2E(this, R.id.jog_activity);
 
         findViewById(R.id.cover_glass).setOnClickListener(v -> {
             // choke
