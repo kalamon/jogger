@@ -36,7 +36,7 @@
     <string name="pref_description_connect_timeout">Connection timeout of a network call (in seconds)</string>
     <string name="pref_description_read_timeout">Read timeout of a network call (in seconds)</string>
     <string name="drawer_title">Duet CNC Jogger</string>
-    <string name="drawer_copyright">&#169; 2021-2024 <![CDATA[<a href="http://trolololo-software.com">Trolololo</a>]]></string>
+    <string name="drawer_copyright">&#169; 2021-2025 <![CDATA[<a href="http://trolololo-software.com">Trolololo</a>]]></string>
     <string name="title_activity_about">About Duet CNC Jogger</string>
     <string name="about_license"><![CDATA[
             <p style=\"text-align:center;\">
@@ -55,7 +55,6 @@
         ]]>
     </string>
     <string name="http_exception">Network error - code %1$d. %2$s</string>
-    <string name="jira_url_does_not_match">JIRA URL in the QR code (%1$s) does not match URL in the machine: %2$s</string>
     <string name="app_version_text">Version %s</string>
     <string name="long_press_for_ops">Long press to edit machine address</string>
     <string name="menu_item_stored_op">Add Duet3D machine</string>

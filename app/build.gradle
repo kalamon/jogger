@@ -9,10 +9,10 @@ android {
 
     defaultConfig {
         applicationId "com.trolololo.workbee.jogger"
-        minSdkVersion 24
+        minSdkVersion 35
         targetSdkVersion 35
-        versionCode 11
-        versionName "0.4.6"
+        versionCode 12
+        versionName "0.4.7"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
